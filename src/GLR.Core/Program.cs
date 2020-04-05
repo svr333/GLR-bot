@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace GLR.Core
 {
-    class Program
+    public class Program
     {
-        static Task Main(string[] args)
+        public static Task Main(string[] args)
             => new GLRClient().InitializeAsync();
     }
 }

@@ -38,9 +38,9 @@ namespace GLR.Core
 
             _client.Ready += OnReadyAsync;
 
-            var test = Environment.GetEnvironmentVariable("GLRToken");
+            var token = Environment.GetEnvironmentVariable("GLRToken");
 
-            await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, test));
+            await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, token));
             await _client.StartAsync();
 
             await _services.GetRequiredService<CommandHandlerService>().InitializeAsync();
