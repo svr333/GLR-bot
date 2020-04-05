@@ -21,6 +21,8 @@ namespace GLR.Core.Commands.Modules
 
             var embed = new EmbedBuilder()
                 .WithTitle($"User profile for {userName}")
+                .WithUrl($"https://galaxylifereborn.com/profile/{userName}")
+                .WithThumbnailUrl($"https://galaxylifereborn.com/uploads/avatars/{id}.png")
                 .WithDescription($"\nThe user's id is {id}.")
                 .Build();
 
