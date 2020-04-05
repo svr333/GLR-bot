@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using GLR.Core.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace GLR.Core.Commands.Modules
@@ -15,15 +16,40 @@ namespace GLR.Core.Commands.Modules
         }
 
         [Command("profile")]
-        public async Task ShowProfile(string userName)
+        public async Task ShowProfile([Remainder]string userName)
         {
-            var id = await _profileService.GetProfileAsync(userName);
+            var profile = await _profileService.GetProfileAsync(userName);
+            if (profile == null) 
+            {
+                await ReplyAsync("Profile not found."); return;
+            }
 
             var embed = new EmbedBuilder()
-                .WithTitle($"User profile for {userName}")
-                .WithUrl($"https://galaxylifereborn.com/profile/{userName}")
-                .WithThumbnailUrl($"https://galaxylifereborn.com/uploads/avatars/{id}.png")
-                .WithDescription($"\nThe user's id is {id}.")
+                .WithTitle($"User profile for {profile.UserName}")
+                .WithUrl(profile.Url)
+                .WithThumbnailUrl(profile.ImageUrl)
+                .WithDescription($"\nThe user's id is {profile.Id}.")
+                .Build();
+
+            await ReplyAsync("", false, embed);
+        }
+
+        [Command("profile")]
+        public async Task ShowProfile()
+        {
+            var name = Context.User.Username;
+
+            var profile = await _profileService.GetProfileAsync(name);
+            if (profile == null) 
+            {
+                await ReplyAsync("Profile not found."); return;
+            }
+
+            var embed = new EmbedBuilder()
+                .WithTitle($"User profile for {profile.UserName}")
+                .WithUrl(profile.Url)
+                .WithThumbnailUrl(profile.ImageUrl)
+                .WithDescription($"\nThe user's id is {profile.Id}.")
                 .Build();
 
             await ReplyAsync("", false, embed);
