@@ -20,6 +20,6 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --project src/GLR.Core/GLR.Core.csproj --configuration Release --no-restore
+      run: dotnet build src/GLR.Core/GLR.Core.csproj --configuration Release --no-restore
     - name: Test
-      run: dotnet test --project src/GLR.Core/GLR.Core.csproj --no-restore --verbosity normal
+      run: dotnet test src/GLR.Core/GLR.Core.csproj --no-restore --verbosity normal
