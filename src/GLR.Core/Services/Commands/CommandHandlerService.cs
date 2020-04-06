@@ -26,6 +26,7 @@ namespace GLR.Core.Services.Commands
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
             _client.MessageReceived += OnMessageReceived;
+            _commands.CommandExecuted += OnCommandExecuted;
         }
 
         private async Task OnMessageReceived(SocketMessage msg)
@@ -44,6 +45,17 @@ namespace GLR.Core.Services.Commands
 
             var context = new SocketCommandContext(_client, message);
             var result = await _commands.ExecuteAsync(context, argPos, _services);
+        }
+
+        private async Task OnCommandExecuted(Optional<CommandInfo> cmd, ICommandContext context, IResult result)
+        {
+            if (result.Error == CommandError.UnknownCommand)
+            {
+                var embed = new EmbedBuilder().WithColor(Color.DarkPurple)
+                .WithTitle("Got em!").WithUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ").Build();
+
+                await context.Channel.SendMessageAsync("", false, embed);
+            }    
         }
     }
 }
