@@ -25,7 +25,7 @@ namespace GLR.Core.Services
                 if (string.IsNullOrEmpty(name)) return null;
 
                 profile.UserName = name;
-                profile.Id = ulong.Parse(userName);  
+                profile.Id = ulong.Parse(userName);
             }
             else
             {
@@ -39,6 +39,10 @@ namespace GLR.Core.Services
 
             profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.UserName}";
             profile.ImageUrl = $"https://galaxylifereborn.com/uploads/avatars/{profile.Id}.png?t={currentUnixTime}";
+
+            var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=c");
+            var stringDate =  await result.Content.ReadAsStringAsync();
+            profile.CreationDate = DateTime.Parse(stringDate);
 
             return profile;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GLR.Core.Commands.Modules
 {
-    public class ProfileModule : GLRModule<SocketCommandContext>
+    public class ProfileModule : GLRModule
     {
         private ProfileService _profileService;
 
@@ -29,6 +29,7 @@ namespace GLR.Core.Commands.Modules
                 .WithUrl(profile.Url)
                 .WithThumbnailUrl(profile.ImageUrl)
                 .WithDescription($"\nThe user's id is {profile.Id}.")
+                .WithFooter($"Account created on {profile.CreationDate.ToLongDateString()}")
                 .Build();
 
             await ReplyAsync("", false, embed);
@@ -50,6 +51,7 @@ namespace GLR.Core.Commands.Modules
                 .WithUrl(profile.Url)
                 .WithThumbnailUrl(profile.ImageUrl)
                 .WithDescription($"\nThe user's id is {profile.Id}.")
+                .WithFooter($"Account created on {profile.CreationDate.ToLongDateString()}")
                 .Build();
 
             await ReplyAsync("", false, embed);
