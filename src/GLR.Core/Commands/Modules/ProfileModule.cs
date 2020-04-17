@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GLR.Core.Commands.Modules
 {
-    public class ProfileModule : GLRModule
+    public class ProfileModule : GLRModule<SocketCommandContext>
     {
         private ProfileService _profileService;
 
