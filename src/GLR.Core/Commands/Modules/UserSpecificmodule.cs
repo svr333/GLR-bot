@@ -9,7 +9,7 @@ namespace GLR.Core.Commands.Modules
         [Command("don")][Alias("naitoo", "chubi")]
         public async Task Don()
         {
-            await ReplyAsync("🐝 <:AAAStarling_Happy:639094721536458752>");
+            await ReplyAsync("🐝 <:AAAStarling_Happy:700370912486359141>");
         }
 
         [Command("maxim")]
@@ -17,6 +17,7 @@ namespace GLR.Core.Commands.Modules
         {
             await ReplyAsync("", false, new EmbedBuilder() { Title = "Maxim is so fucking gay that he ..."}
             .WithFooter("Finish the sentence like a boss").Build());
+            await Context.Channel.SendFileAsync("assets/maxim.mp4");
         }
 
         [Command("marido")]
@@ -25,7 +26,7 @@ namespace GLR.Core.Commands.Modules
             await ReplyAsync("**Marido:** Flash release will be tomorrow!");
         }
 
-        [Command("tom")][Alias("inika", "bg")]
+        [Command("tom")][Alias("inika", "bg", "svr333", "svr")]
         public async Task Bg()
         {
             await ReplyAsync("Tom and Inika are the biggest bg (not big gay)");
@@ -39,5 +40,15 @@ namespace GLR.Core.Commands.Modules
             .WithThumbnailUrl("https://cdn.discordapp.com/avatars/214049777183096833/4163f0aeb558af7df4bb472141788e31.png?size=1024").Build();
             await ReplyAsync("<a:miro2:696692388218798140> <a:miro:696692388130717727>", false, embed);
         }
+
+        [Command("aniela")]
+        public async Task Aniela()
+        {
+            await ReplyAsync("Idk some yiff furry shit, #FurrysAreGood");
+        }
+
+        [Command("whirl")]
+        public async Task Whirl()
+            => await Context.Channel.SendFileAsync("assets/whirl.mp4");
     }
 }

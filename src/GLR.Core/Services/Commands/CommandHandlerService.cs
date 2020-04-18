@@ -49,13 +49,7 @@ namespace GLR.Core.Services.Commands
 
         private async Task OnCommandExecuted(Optional<CommandInfo> cmd, ICommandContext context, IResult result)
         {
-            if (result.Error == CommandError.UnknownCommand)
-            {
-                var embed = new EmbedBuilder().WithColor(Color.DarkPurple)
-                .WithTitle("Got em!").WithUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ").Build();
-
-                await context.Channel.SendMessageAsync("", false, embed);
-            }    
+            // TODO: Implement
         }
     }
 }

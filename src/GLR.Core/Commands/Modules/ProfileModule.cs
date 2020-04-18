@@ -15,7 +15,7 @@ namespace GLR.Core.Commands.Modules
             _profileService = profileService;
         }
 
-        [Command("profile")]
+        [Command("profile", RunMode = RunMode.Async)]
         public async Task ShowProfile([Remainder]string userName)
         {
             var profile = await _profileService.GetProfileAsync(userName);
@@ -25,17 +25,20 @@ namespace GLR.Core.Commands.Modules
             }
 
             var embed = new EmbedBuilder()
-                .WithTitle($"User profile for {profile.UserName}")
+                .WithTitle($"Game profile for {profile.UserName}")
                 .WithUrl(profile.Url)
                 .WithThumbnailUrl(profile.ImageUrl)
-                .WithDescription($"\nThe user's id is {profile.Id}.")
+                .WithDescription($"\nThis user has ID **{profile.Id}**.")
+                .AddField("Friends", $"The user has **{profile.AmountOfFriends}** friends." +
+                    $"\nThe user has **{profile.AmountOfIncomingRequests}** pending incoming requests." +
+                    $"\nThe user has **{profile.AmountOfOutgoingRequests}** pending outgoing requests.")
                 .WithFooter($"Account created on {profile.CreationDate.ToLongDateString()}")
                 .Build();
 
             await ReplyAsync("", false, embed);
         }
 
-        [Command("profile")]
+        [Command("profile", RunMode = RunMode.Async)]
         public async Task ShowProfile()
         {
             var name = Context.User.Username;
@@ -47,10 +50,13 @@ namespace GLR.Core.Commands.Modules
             }
 
             var embed = new EmbedBuilder()
-                .WithTitle($"User profile for {profile.UserName}")
+                .WithTitle($"Game profile for {profile.UserName}")
                 .WithUrl(profile.Url)
                 .WithThumbnailUrl(profile.ImageUrl)
-                .WithDescription($"\nThe user's id is {profile.Id}.")
+                .WithDescription($"\nThis user has ID **{profile.Id}**.")
+                .AddField("Friends", $"The user has **{profile.AmountOfFriends}** friends." +
+                    $"\nThe user has **{profile.AmountOfIncomingRequests}** pending incoming requests." +
+                    $"\nThe user has **{profile.AmountOfOutgoingRequests}** pending outgoing requests.")
                 .WithFooter($"Account created on {profile.CreationDate.ToLongDateString()}")
                 .Build();
 
