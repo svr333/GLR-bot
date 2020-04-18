@@ -39,7 +39,7 @@ namespace GLR.Core.Services
                 profile.UserName = actualUsername;
             }
 
-            profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.UserName}";
+            profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.UserName.Replace(" ", "%20")}";
             profile.ImageUrl = $"https://galaxylifereborn.com/uploads/avatars/{profile.Id}.png?t={currentUnixTime}";
 
             var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=c");

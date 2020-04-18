@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+
 
 namespace GLR.Core.Entities
 {
@@ -11,7 +11,7 @@ namespace GLR.Core.Entities
         public string ImageUrl { get; set; }
         public DateTime CreationDate { get; set; }
         public int AmountOfFriends { get; set; }
-        public object AmountOfIncomingRequests { get; set; }
-        public object AmountOfOutgoingRequests { get; set; }
+        public int AmountOfIncomingRequests { get; set; }
+        public int AmountOfOutgoingRequests { get; set; }
     }
 }
