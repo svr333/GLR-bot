@@ -3,25 +3,30 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GLR.Core.Entities;
-using Newtonsoft.Json;
 
 namespace GLR.Core.Services
 {
     public class ProfileService
     {
+        private HttpClient _webClient;
+
+        public ProfileService()
+        {
+            _webClient = new HttpClient();
+        }
+        
         internal async Task<Profile> GetProfileAsync(string userName) // sVr333
         {
-            var webclient = new HttpClient();
             Profile profile = new Profile();
             var currentUnixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-            var response = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={userName}&t=i");
+            var response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={userName}&t=i");
 
             var stringId = await response.Content.ReadAsStringAsync();
 
             if (string.IsNullOrEmpty(stringId))
             {
-                var secResponse = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={userName}&t=n");
+                var secResponse = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={userName}&t=n");
                 var name = await secResponse.Content.ReadAsStringAsync();
 
                 if (string.IsNullOrEmpty(name)) return null;
@@ -33,7 +38,7 @@ namespace GLR.Core.Services
             {
                 profile.Id = ulong.Parse(stringId);
 
-                var fourthResponse = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=n");
+                var fourthResponse = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=n");
                 var actualUsername = await fourthResponse.Content.ReadAsStringAsync();
 
                 profile.UserName = actualUsername;
@@ -42,15 +47,15 @@ namespace GLR.Core.Services
             profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.UserName.Replace(" ", "%20")}";
             profile.ImageUrl = $"https://galaxylifereborn.com/uploads/avatars/{profile.Id}.png?t={currentUnixTime}";
 
-            var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=c");
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=c");
             var stringDate =  await result.Content.ReadAsStringAsync();
 
             profile.CreationDate = DateTime.Parse(stringDate);
-            profile.AmountOfFriends = await GetAmountOfFriends(profile.Id);
-            profile.AmountOfIncomingRequests = await GetAmountOfIncomingRequests(profile.Id);
-            profile.AmountOfOutgoingRequests = await GetAmountOfOutgoingRequests(profile.Id);
+            profile.AmountOfFriends = await GetAmountOfFriendsAsync(profile.Id);
+            profile.AmountOfIncomingRequests = await GetAmountOfIncomingRequestsAsync(profile.Id);
+            profile.AmountOfOutgoingRequests = await GetAmountOfOutgoingRequestsAsync(profile.Id);
 
-            result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=t");
+            result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=t");
             var stringRank =  await result.Content.ReadAsStringAsync();
             var success = Enum.TryParse(stringRank, out Rank rank);
 
@@ -62,10 +67,9 @@ namespace GLR.Core.Services
             return profile;
         }
         
-        private async Task<int> GetAmountOfFriends(ulong id)
+        private async Task<int> GetAmountOfFriendsAsync(ulong id)
         {
-            var webclient = new HttpClient();
-            var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
             var friendsAsString = await result.Content.ReadAsStringAsync();
 
             var friendIds = friendsAsString.Split(", ");
@@ -78,10 +82,9 @@ namespace GLR.Core.Services
             return friends.Count;*/
         }
 
-        private async Task<int> GetAmountOfIncomingRequests(ulong id)
+        private async Task<int> GetAmountOfIncomingRequestsAsync(ulong id)
         {
-            var webclient = new HttpClient();
-            var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=r");
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=r");
             var requestsAsString = await result.Content.ReadAsStringAsync();
 
             var userIds = requestsAsString.Split(", ");
@@ -89,10 +92,9 @@ namespace GLR.Core.Services
             return userIds is null ?  0 : userIds.Length;
         }
 
-        private async Task<int> GetAmountOfOutgoingRequests(ulong id)
+        private async Task<int> GetAmountOfOutgoingRequestsAsync(ulong id)
         {
-            var webclient = new HttpClient();
-            var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=s");
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=s");
             var requestsAsString = await result.Content.ReadAsStringAsync();
 
             var userIds = requestsAsString.Split(", ");
@@ -100,10 +102,9 @@ namespace GLR.Core.Services
             return userIds is null ?  0 : userIds.Length;
         }
 
-        public async Task<List<Profile>> GetFriends(ulong id)
+        public async Task<List<Profile>> GetFriendsAsync(ulong id)
         {
-            var webclient = new HttpClient();
-            var result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
             var friendsAsString = await result.Content.ReadAsStringAsync();
 
             var friendIds = friendsAsString.Split(", ");
