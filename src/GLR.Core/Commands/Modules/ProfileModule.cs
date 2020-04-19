@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using GLR.Core.Services;
-using System;
 using System.Threading.Tasks;
 
 namespace GLR.Core.Commands.Modules
@@ -23,7 +22,8 @@ namespace GLR.Core.Commands.Modules
             var profile = await _profileService.GetProfileAsync(userName);
             if (profile == null) 
             {
-                await ReplyAsync("Profile not found."); return;
+                await ReplyAsync($"There is no user named `{userName}`.");
+                return;
             }
 
             var embed = new EmbedBuilder()
