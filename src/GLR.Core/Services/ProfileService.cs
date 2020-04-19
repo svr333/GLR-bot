@@ -50,6 +50,15 @@ namespace GLR.Core.Services
             profile.AmountOfIncomingRequests = await GetAmountOfIncomingRequests(profile.Id);
             profile.AmountOfOutgoingRequests = await GetAmountOfOutgoingRequests(profile.Id);
 
+            result = await webclient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=t");
+            var stringRank =  await result.Content.ReadAsStringAsync();
+            var success = Enum.TryParse(stringRank, out Rank rank);
+
+            profile.RankInfo = new RankInfo()
+            {
+                Rank = rank
+            };
+
             return profile;
         }
         

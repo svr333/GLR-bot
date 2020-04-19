@@ -7,6 +7,7 @@ namespace GLR.Core.Entities
     {
         public ulong Id { get; set; }
         public string UserName { get; set; }
+        public RankInfo RankInfo { get; set; }
         public string Url { get; set; }
         public string ImageUrl { get; set; }
         public DateTime CreationDate { get; set; }
