@@ -36,7 +36,7 @@ namespace GLR.Core.Services.Commands
 
             if (message.Channel is IPrivateChannel)
             {
-                await message.Channel.SendMessageAsync($"I only respond in guilds.\n\nPS: Maxim is gay");
+                await message.Channel.SendMessageAsync($"I only respond in guilds.");
                 return;
             }
 
