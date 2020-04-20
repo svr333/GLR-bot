@@ -32,7 +32,7 @@ namespace GLR.Core.Services.Commands
         private async Task OnMessageReceived(SocketMessage msg)
         {
             if (!(msg is SocketUserMessage message)) return;
-            if (message.Author == _client.CurrentUser) { return; }                
+            if (message.Author == _client.CurrentUser) { return; }
 
             if (message.Channel is IPrivateChannel)
             {
