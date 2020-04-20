@@ -48,9 +48,7 @@ namespace GLR.Core
         }
 
         private async Task OnReadyAsync()
-        {
-            await _client.SetGameAsync("Maxim is still gay af lol");
-        }
+            => await _client.SetGameAsync("Serving Galaxy Life Reborn profiles since 1842.");
 
         private ServiceProvider ConfigureServices()
         {
