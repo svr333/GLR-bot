@@ -19,7 +19,7 @@ namespace GLR.Core.Commands.Modules
         {
             if (string.IsNullOrEmpty(userName)) userName = Context.User.Username;
 
-            var profile = await _profileService.GetProfileAsync(userName);
+            var profile = await _profileService.GetFullProfileAsync(userName);
             if (profile == null) 
             {
                 await ReplyAsync($"There is no user named `{userName}`.");
@@ -27,11 +27,11 @@ namespace GLR.Core.Commands.Modules
             }
 
             var embed = new EmbedBuilder()
-                .WithTitle($"Game profile for {profile.UserName}")
+                .WithTitle($"Game profile for {profile.Username}")
                 .WithUrl(profile.Url)
                 .WithThumbnailUrl(profile.ImageUrl)
                 .WithDescription($"\nThis user has ID **{profile.Id}**." +
-                                $"\n**{profile.UserName}** is a **{profile.RankInfo.Rank}**.")
+                                $"\n**{profile.Username}** is a **{profile.RankInfo.Rank}**.")
                 .AddField("Friends", $"The user has **{profile.AmountOfFriends}** friends." +
                     $"\nThe user has **{profile.AmountOfIncomingRequests}** pending incoming requests." +
                     $"\nThe user has **{profile.AmountOfOutgoingRequests}** pending outgoing requests.")

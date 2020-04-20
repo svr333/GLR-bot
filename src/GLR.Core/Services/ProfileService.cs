@@ -15,58 +15,55 @@ namespace GLR.Core.Services
             _webClient = new HttpClient();
         }
         
-        internal async Task<Profile> GetProfileAsync(string userName) // sVr333
+        internal async Task<Profile> GetFullProfileAsync(string input)
         {
             Profile profile = new Profile();
             var currentUnixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-            var response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={userName}&t=i");
-
-            var stringId = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrEmpty(stringId))
-            {
-                var secResponse = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={userName}&t=n");
-                var name = await secResponse.Content.ReadAsStringAsync();
-
-                if (string.IsNullOrEmpty(name)) return null;
-
-                profile.UserName = name;
-                profile.Id = ulong.Parse(userName);
-            }
-            else
-            {
-                profile.Id = ulong.Parse(stringId);
-
-                var fourthResponse = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=n");
-                var actualUsername = await fourthResponse.Content.ReadAsStringAsync();
-
-                profile.UserName = actualUsername;
-            }
-
-            profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.UserName.Replace(" ", "%20")}";
+            profile.Id = await GetIdAsync(input);
+            profile.Username = await GetUsernameAsync(profile.Id);
+            profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.Username.Replace(" ", "%20")}";
             profile.ImageUrl = $"https://galaxylifereborn.com/uploads/avatars/{profile.Id}.png?t={currentUnixTime}";
 
-            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=c");
-            var stringDate =  await result.Content.ReadAsStringAsync();
-
-            profile.CreationDate = DateTime.Parse(stringDate);
             profile.AmountOfFriends = await GetAmountOfFriendsAsync(profile.Id);
             profile.AmountOfIncomingRequests = await GetAmountOfIncomingRequestsAsync(profile.Id);
             profile.AmountOfOutgoingRequests = await GetAmountOfOutgoingRequestsAsync(profile.Id);
 
-            result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={profile.Id}&t=t");
-            var stringRank =  await result.Content.ReadAsStringAsync();
-            var success = Enum.TryParse(stringRank, out Rank rank);
-
-            profile.RankInfo = new RankInfo()
-            {
-                Rank = rank
-            };
+            profile.RankInfo = await GetRankInfoAsync(profile.Id);
+            profile.CreationDate = await GetCreationDateAsync(profile.Id);
 
             return profile;
         }
-        
+
+        private async Task<ulong> GetIdAsync(string input)
+        {
+            // check if input is username
+            var response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={input}&t=i");
+            var stringId = await response.Content.ReadAsStringAsync();
+            
+            // if returns "" => no such user exists
+            if (!string.IsNullOrEmpty(stringId)) return ulong.Parse(stringId);
+
+            // check if given input is id
+            response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={input}&t=n");
+            var name = await response.Content.ReadAsStringAsync();
+
+            // if it's empty, there is no user for the given input
+            // return 0, so we can catch it and handle it
+            if (string.IsNullOrEmpty(name)) return 0;
+
+            // now we know the input was an id
+            return ulong.Parse(input);
+        }
+
+        private async Task<string> GetUsernameAsync(ulong id)
+        {
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=n");
+            var username = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            
+            return username;
+        }
+
         private async Task<int> GetAmountOfFriendsAsync(ulong id)
         {
             var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
@@ -102,8 +99,29 @@ namespace GLR.Core.Services
             return userIds is null ?  0 : userIds.Length;
         }
 
+        private async Task<RankInfo> GetRankInfoAsync(ulong id)
+        {
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=t");
+            var stringRank =  await result.Content.ReadAsStringAsync();
+            var isSuccess = Enum.TryParse(stringRank, out Rank rank);
+
+            return new RankInfo()
+            {
+                Rank = rank
+            };
+        }
+
+        private async Task<DateTime> GetCreationDateAsync(ulong id)
+        {
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=c");
+            var stringDate =  await result.Content.ReadAsStringAsync();
+
+            return DateTime.Parse(stringDate);
+        }
+
         public async Task<List<Profile>> GetFriendsAsync(ulong id)
         {
+            var start = DateTime.Now;
             var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
             var friendsAsString = await result.Content.ReadAsStringAsync();
 
@@ -116,10 +134,11 @@ namespace GLR.Core.Services
 
             for (int i = 0; i < friendIds.Length; i++)
             {
-                var currentFriend = await GetProfileAsync(friendIds[i]);
+                var currentFriend = await GetFullProfileAsync(friendIds[i]);
                 friends.Add(currentFriend);
             }
 
+            Console.WriteLine((DateTime.Now - start).TotalMilliseconds);
             return friends;
         }
     }
