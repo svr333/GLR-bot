@@ -22,7 +22,7 @@ namespace GLR.Core.Services
 
             profile.Id = await GetIdAsync(input);
             profile.Username = await GetUsernameAsync(profile.Id);
-            profile.Url = $"https://www.galaxylifereborn.com/profile/{profile.Username.Replace(" ", "%20")}";
+            profile.Url = $"https://galaxylifereborn.com/profile/{profile.Username.Replace(" ", "%20")}";
             profile.ImageUrl = $"https://galaxylifereborn.com/uploads/avatars/{profile.Id}.png?t={currentUnixTime}";
 
             profile.AmountOfFriends = await GetAmountOfFriendsAsync(profile.Id);
