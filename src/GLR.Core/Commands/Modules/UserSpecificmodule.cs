@@ -48,7 +48,15 @@ namespace GLR.Core.Commands.Modules
         }
 
         [Command("whirl")]
-        public async Task Whirl()
+        public async Task WhirlDies()
             => await Context.Channel.SendFileAsync("assets/whirl.mp4");
+
+        [Command("whirl2")]
+        public async Task WhirlLives()
+            => await Context.Channel.SendFileAsync("assets/whirl2.mp4");
+
+        [Command("whirl3")]
+        public async Task WhirlOriginal()
+            => await Context.Channel.SendFileAsync("assets/whirl3.mp4");
     }
 }
