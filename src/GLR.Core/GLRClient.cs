@@ -27,7 +27,7 @@ namespace GLR.Core
             _commands = commands ?? new CommandService(new CommandServiceConfig
             {
                 CaseSensitiveCommands = false,
-                LogLevel = LogSeverity.Debug,
+                LogLevel = LogSeverity.Verbose,
                 SeparatorChar = '|'
             });
         }
@@ -38,6 +38,9 @@ namespace GLR.Core
 
             _client.Ready += OnReadyAsync;
 
+            _client.Log += LogAsync;
+            _commands.Log += LogAsync;
+
             var token = Environment.GetEnvironmentVariable("GLRToken");
 
             await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, token));
@@ -46,6 +49,9 @@ namespace GLR.Core
             await _services.GetRequiredService<CommandHandlerService>().InitializeAsync();
             await Task.Delay(-1);
         }
+
+        private async Task LogAsync(LogMessage msg)
+            => Console.WriteLine($"{msg.Source}: {msg.Message}");
 
         private async Task OnReadyAsync()
             => await _client.SetGameAsync("Serving Galaxy Life Reborn profiles since 1842.");
