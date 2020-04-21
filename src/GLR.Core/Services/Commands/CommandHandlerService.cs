@@ -47,9 +47,41 @@ namespace GLR.Core.Services.Commands
             var result = await _commands.ExecuteAsync(context, argPos, _services);
         }
 
-        private async Task OnCommandExecuted(Optional<CommandInfo> cmd, ICommandContext context, IResult result)
+        private async Task OnCommandExecuted(Optional<CommandInfo> cmd, ICommandContext ctx, IResult result)
         {
             // TODO: Implement
+            if (!cmd.IsSpecified) await ctx.Channel.SendMessageAsync(
+                "Error occurred outside of commandcontext.\nPlease ask <@202095042372829184> for help unless it's obvious.");
+            
+            if (result.IsSuccess) 
+            {
+                await ctx.Message.AddReactionAsync(new Emoji("✅"));
+                return;
+            }
+
+            var command = cmd.Value;
+
+            switch (result.ErrorReason)
+            {
+                case "Profile404": await ctx.Channel.SendMessageAsync($"Galaxy Life Reborn profile for {ctx.Message.Content.Remove(0, 9)} not found.");
+                break;
+
+                default: await SendDefaultErrorMessage(ctx, cmd.Value, result.ErrorReason);
+                break;
+            }
+        }
+
+        private async Task SendDefaultErrorMessage(ICommandContext ctx, CommandInfo cmd, string error)
+        {
+            var embed = new EmbedBuilder()
+            {
+                Color = Color.Orange,
+                Title = $"Error occurred while executing command '{cmd.Module.Name}: {cmd.Name}'",
+                Description = $"{error}\nIf you think this error is out of place, please contact <@202095042372829184>.\n"
+            }
+            .Build();
+        
+            await ctx.Channel.SendMessageAsync("", false, embed);
         }
     }
 }

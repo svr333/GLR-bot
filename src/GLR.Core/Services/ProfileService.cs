@@ -49,8 +49,8 @@ namespace GLR.Core.Services
             var name = await response.Content.ReadAsStringAsync();
 
             // if it's empty, there is no user for the given input
-            // return 0, so we can catch it and handle it
-            if (string.IsNullOrEmpty(name)) return 0;
+            // throw so we catch it in the CommandExecuted event
+            if (string.IsNullOrEmpty(name)) throw new Exception("Profile404");
 
             // now we know the input was an id
             return ulong.Parse(input);
@@ -72,11 +72,6 @@ namespace GLR.Core.Services
             var friendIds = friendsAsString.Split(", ");
             if (friendIds[0] == "") friendIds = null;
             return friendIds is null ?  0 : friendIds.Length;
-
-            /*var friends = await GetFriends(id);
-
-            if (friends is null) return 0;
-            return friends.Count;*/
         }
 
         private async Task<int> GetAmountOfIncomingRequestsAsync(ulong id)
