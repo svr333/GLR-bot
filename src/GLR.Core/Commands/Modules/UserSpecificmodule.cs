@@ -26,7 +26,7 @@ namespace GLR.Core.Commands.Modules
             await ReplyAsync("**Marido:** Flash release will be tomorrow!");
         }
 
-        [Command("tom")][Alias("inika", "bg", "svr333", "svr")]
+        [Command("tom")][Alias("inika", "bg")]
         public async Task Bg()
         {
             await ReplyAsync("Tom and Inika are the biggest bg (not big gay)");
@@ -58,5 +58,9 @@ namespace GLR.Core.Commands.Modules
         [Command("whirl3")]
         public async Task WhirlOriginal()
             => await Context.Channel.SendFileAsync("assets/whirl3.mp4");
+
+        [Command("svr")][Alias("svr333")]
+        public async Task Svr()
+            => await Context.Channel.SendFileAsync("assets/svr.mp4");
     }
 }
