@@ -3,7 +3,9 @@ using Discord.Commands;
 using Discord.WebSocket;
 using GLR.Core.Extensions;
 using System;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GLR.Core.Services.Commands
@@ -49,21 +51,23 @@ namespace GLR.Core.Services.Commands
 
         private async Task OnCommandExecuted(Optional<CommandInfo> cmd, ICommandContext ctx, IResult result)
         {
-            // TODO: Implement
-            if (!cmd.IsSpecified) await ctx.Channel.SendMessageAsync(
-                "Error occurred outside of commandcontext.\nPlease ask <@202095042372829184> for help unless it's obvious.");
-            
             if (result.IsSuccess) 
             {
                 await ctx.Message.AddReactionAsync(new Emoji("✅"));
                 return;
             }
 
-            var command = cmd.Value;
+            if (result.Error == CommandError.UnknownCommand) return;
+            if (result.Error == CommandError.BadArgCount)
+            {
+                await SendWrongParameterCountMessage(ctx, cmd.Value);
+                return;
+            }
+            
 
             switch (result.ErrorReason)
             {
-                case "Profile404": await ctx.Channel.SendMessageAsync($"Galaxy Life Reborn profile for {ctx.Message.Content.Remove(0, 9)} not found.");
+                case "Profile404": await ctx.Channel.SendMessageAsync($"Galaxy Life Reborn profile for `{ctx.Message.Content.Remove(0, 9)}` not found.");
                 break;
 
                 default: await SendDefaultErrorMessage(ctx, cmd.Value, result.ErrorReason);
@@ -73,15 +77,53 @@ namespace GLR.Core.Services.Commands
 
         private async Task SendDefaultErrorMessage(ICommandContext ctx, CommandInfo cmd, string error)
         {
+            error = error.StartsWith("Could not find file") ? "Requested file not found." : error;
+
             var embed = new EmbedBuilder()
             {
-                Color = Color.Orange,
-                Title = $"Error occurred while executing command '{cmd.Module.Name}: {cmd.Name}'",
-                Description = $"{error}\nIf you think this error is out of place, please contact <@202095042372829184>.\n"
+                Color = Color.DarkOrange,
+                Title = $"{error}",
+                Description = $"Error occurred while executing command '{cmd.Module.Name}: {cmd.Name}'.\n"
             }
             .Build();
         
             await ctx.Channel.SendMessageAsync("", false, embed);
         }
+    
+        private async Task SendWrongParameterCountMessage(ICommandContext ctx, CommandInfo command)
+        {
+            var fieldValue = GenerateUsageField(command);
+
+            var embed = new EmbedBuilder()
+            .WithTitle("Correct usage:")
+            .WithDescription(fieldValue)
+            .WithColor(Color.DarkOrange)
+            .WithFooter("Tip: <> means mandatory, [] optional")
+            .Build();
+
+            await ctx.Channel.SendMessageAsync("", false, embed);
+        }
+
+        private string GenerateUsageField(CommandInfo command)
+        {
+            string example = "";
+            StringBuilder parameters = new StringBuilder();
+
+            for (int i = 0; i < command.Parameters.Count; i++)
+            {
+                var pref = "<";
+                var suff = ">";
+                
+                if (command.Parameters[i].IsOptional)
+                {
+                    pref = "["; suff = "]";
+                }
+
+                parameters.Append($"{pref}{command.Parameters[i]}{suff} ");
+            }
+            
+            example = $"\n!**{command.Aliases[0]} {parameters}**";
+            return example;
+        } 
     }
 }
