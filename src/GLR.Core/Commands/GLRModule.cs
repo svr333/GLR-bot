@@ -2,7 +2,7 @@
 
 namespace GLR.Core.Commands
 {
-    public class GLRModule<T> : ModuleBase<T> where T : class, ICommandContext
+    public class GLRModule : ModuleBase<SocketCommandContext>
     {
         protected override void BeforeExecute(CommandInfo command)
         {

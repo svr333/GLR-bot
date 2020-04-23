@@ -4,7 +4,7 @@ using Discord.Commands;
 
 namespace GLR.Core.Commands.Modules
 {
-    public class UserSpecificModule : GLRModule<SocketCommandContext>
+    public class UserSpecificModule : GLRModule
     {
         [Command("don")][Alias("naitoo", "chubi")]
         public async Task Don()
@@ -22,9 +22,7 @@ namespace GLR.Core.Commands.Modules
 
         [Command("marido")]
         public async Task Marido()
-        {
-            await ReplyAsync("**Marido:** Flash release will be tomorrow!");
-        }
+            => await Context.Channel.SendFileAsync("assets/marido.mp4");
 
         [Command("tom")][Alias("inika", "bg")]
         public async Task Bg()
@@ -62,5 +60,9 @@ namespace GLR.Core.Commands.Modules
         [Command("svr")][Alias("svr333")]
         public async Task Svr()
             => await Context.Channel.SendFileAsync("assets/svr.mp4");
+
+        [Command("acer")]
+        public async Task Acer()
+            => await ReplyAsync("Acer be like:\nhttps://www.youtube.com/watch?v=cpZma0JjwIo");
     }
 }
