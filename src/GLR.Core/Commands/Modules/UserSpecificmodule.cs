@@ -24,11 +24,9 @@ namespace GLR.Core.Commands.Modules
         public async Task Marido()
             => await Context.Channel.SendFileAsync("assets/marido.mp4");
 
-        [Command("tom")][Alias("inika", "bg")]
+        [Command("tom")][Alias("inika", "bg", "jerry")]
         public async Task Bg()
-        {
-            await ReplyAsync("Tom and Inika are the biggest bg (not big gay)");
-        }
+            => await ReplyAsync("Tom and Jerry are the biggest bg (not big gay)");
         
         [Command("nudes")]
         public async Task Nudes()
@@ -41,9 +39,7 @@ namespace GLR.Core.Commands.Modules
 
         [Command("aniela")]
         public async Task Aniela()
-        {
-            await ReplyAsync("Idk some yiff furry shit, #FurrysAreGood");
-        }
+            => await ReplyAsync("Idk some yiff furry shit, #FurrysAreGood");
 
         [Command("whirl")]
         public async Task WhirlDies()
