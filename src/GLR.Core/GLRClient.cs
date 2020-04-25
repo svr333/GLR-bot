@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using GLR.Core.Services;
 using GLR.Core.Services.Commands;
+using GLR.Core.Services.DataStorage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -63,6 +64,8 @@ namespace GLR.Core
                 .AddSingleton(_commands)
                 .AddSingleton<CommandHandlerService>()
                 .AddSingleton<ProfileService>()
+                .AddSingleton<LiteDBHandler>()
+                .AddSingleton<GuildAccountService>()
                 .BuildServiceProvider();
         }
     }

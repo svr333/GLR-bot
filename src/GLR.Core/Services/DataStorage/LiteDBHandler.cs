@@ -8,7 +8,7 @@ namespace GLR.Core.Services.DataStorage
 {
     public class LiteDBHandler
     {
-        private string _dbFileName = "Storage.db";
+        private string _dbFileName = "Data.db";
 
         public void Store<T>(T item)
         {
@@ -38,7 +38,13 @@ namespace GLR.Core.Services.DataStorage
         }
 
         public T RestoreSingle<T>(Expression<Func<T, bool>> predicate)
-            => RestoreMany(predicate).FirstOrDefault();
+        {
+            using (var db = new LiteDatabase(_dbFileName))
+            {
+                var collection = db.GetCollection<T>();
+                return collection.Find(predicate).First();
+            }
+        }
 
         public bool Exists<T>(Expression<Func<T, bool>> predicate)
         {
@@ -47,6 +53,7 @@ namespace GLR.Core.Services.DataStorage
                 var collection = db.GetCollection<T>();
                 return collection.Exists(predicate);
             }
+            
         }
     }
 }

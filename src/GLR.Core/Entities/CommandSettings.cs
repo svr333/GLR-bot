@@ -5,7 +5,6 @@ namespace GLR.Core.Entities
 {
     public class CommandSettings
     {
-        [BsonId]
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
         public bool ChannelListIsBlacklist { get; set; }

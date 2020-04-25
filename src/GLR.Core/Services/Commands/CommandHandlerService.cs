@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using GLR.Core.Extensions;
+using GLR.Core.Services.DataStorage;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -15,12 +16,14 @@ namespace GLR.Core.Services.Commands
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
         private readonly IServiceProvider _services;
+        private readonly GuildAccountService _accounts;
 
-        public CommandHandlerService(DiscordSocketClient client, CommandService commands, IServiceProvider services)
+        public CommandHandlerService(DiscordSocketClient client, CommandService commands, IServiceProvider services, GuildAccountService accounts)
         {
             _commands = commands;
             _client = client;
             _services = services;
+            _accounts = accounts;
         }
 
         public async Task InitializeAsync()
@@ -35,15 +38,18 @@ namespace GLR.Core.Services.Commands
         {
             if (!(msg is SocketUserMessage message)) return;
             if (message.Author == _client.CurrentUser) { return; }
-
+            
             if (message.Channel is IPrivateChannel)
             {
                 await message.Channel.SendMessageAsync($"I only respond in guilds.");
                 return;
             }
 
+            var guildId = (message.Author as SocketGuildUser).Guild.Id;
+            var guild = _accounts.GetOrCreateGuildAccount(guildId);
+
             int argPos = 0;
-            if (!message.HasPrefix(_client, out argPos, "!")) { return; }
+            if (!message.HasPrefix(_client, out argPos, guild.Prefixes)) { return; }
 
             var context = new SocketCommandContext(_client, message);
             var result = await _commands.ExecuteAsync(context, argPos, _services);

@@ -1,17 +1,61 @@
-﻿using Discord.Commands;
+﻿using System;
+using System.Linq;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using GLR.Core.Entities;
+using GLR.Core.Services.DataStorage;
 
 namespace GLR.Core.Commands
 {
     public class GLRModule : ModuleBase<SocketCommandContext>
     {
+        public GuildAccountService Accounts { get; set; }
+        private CommandInfo _currentCommand;
+        [DontInject]
+        public string ExpandedCommandName => $"{_currentCommand.Module.Name}_{_currentCommand.Name}".ToLower();
+
         protected override void BeforeExecute(CommandInfo command)
-        {
-            base.BeforeExecute(command);
+        {            
+            _currentCommand = command;
+            var guild = Accounts.GetOrCreateGuildAccount(Context.Guild.Id);
+            
+            if (!CommandIsAllowedToRun(guild))
+            {
+                Context.Message.AddReactionAsync(new Emoji("⛔"));
+                throw new Exception("User has insuffient permission to execute command.");
+            }
         }
 
         protected override void AfterExecute(CommandInfo command)
+            => base.AfterExecute(command);
+
+        private bool CommandIsAllowedToRun(GuildAccount guild)
         {
-            base.AfterExecute(command);
+            var currentCommand = guild.Commands.Find(x => x.Name == $"{_currentCommand.Module.Name}_{_currentCommand.Name}".ToLower());
+            
+            if (!currentCommand.IsEnabled) return false;
+
+            var userHasRoleInList = UserHasRoleInList(currentCommand);
+            if (currentCommand.RolesListIsBlacklist && userHasRoleInList
+            || !currentCommand.RolesListIsBlacklist && !userHasRoleInList) 
+                return false;
+            
+            var channelIsInList = currentCommand.WhitelistedChannels.Contains(Context.Channel.Id);
+            if (currentCommand.ChannelListIsBlacklist && channelIsInList
+            || !currentCommand.ChannelListIsBlacklist && !channelIsInList) 
+                return false;
+
+            return true;
+        }
+
+        private bool UserHasRoleInList(CommandSettings command)
+        {
+            var user = (Context.Message.Author as SocketGuildUser);
+            var rolesInCommon = user.Roles.Select(x => x.Id).Intersect(command.WhitelistedRoles);
+
+            if (!rolesInCommon.Any() || rolesInCommon == null) return false;
+            return true;
         }
     }
 }
