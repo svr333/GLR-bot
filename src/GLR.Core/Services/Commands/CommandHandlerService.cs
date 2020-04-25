@@ -76,6 +76,8 @@ namespace GLR.Core.Services.Commands
                 case "Profile404": await ctx.Channel.SendMessageAsync($"Galaxy Life Reborn profile for `{ctx.Message.Content.Remove(0, 9)}` not found.");
                 break;
 
+                case "User has insuffient permission to execute command.": break;
+
                 default: await SendDefaultErrorMessage(ctx, cmd.Value, result.ErrorReason);
                 break;
             }
@@ -89,7 +91,6 @@ namespace GLR.Core.Services.Commands
             {
                 Color = Color.DarkOrange,
                 Title = $"{error}",
-                Description = $"Error occurred while executing command '{cmd.Module.Name}: {cmd.Name}'.\n"
             }
             .Build();
         
