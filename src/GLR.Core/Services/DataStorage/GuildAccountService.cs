@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Discord.Commands;
@@ -29,19 +28,7 @@ namespace GLR.Core.Services.DataStorage
             => SaveGuildAccount(new GuildAccount() { Id = id, Commands = GenerateSettingsForAllCommands(_commands.Commands)} );
 
         private GuildAccount GetGuildAccount(ulong id)
-        {
-            try
-            {
-                var test = _storage.RestoreSingle<GuildAccount>(x => x.Id == id);
-                return test;
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                return null;
-            }
-            
-        }
+            => _storage.RestoreSingle<GuildAccount>(x => x.Id == id);
 
         internal void SaveGuildAccount(GuildAccount guild)
         {
