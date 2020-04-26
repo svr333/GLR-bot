@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Discord.Commands;
 
 namespace GLR.Core.Entities
 {
@@ -41,6 +42,17 @@ namespace GLR.Core.Entities
             if (isChannel) command.WhitelistedChannels.Add(id);
             else command.WhitelistedRoles.Add(id);
         }
+
+        public void AddNewCommand(CommandInfo command)
+            => Commands.Add(new CommandSettings()
+            {
+                Name = $"{command.Module.Name}_{command.Name}".ToLower(),
+                IsEnabled = true,
+                ChannelListIsBlacklist = true,
+                RolesListIsBlacklist = true,
+                WhitelistedChannels = new List<ulong>(),
+                WhitelistedRoles = new List<ulong>()
+            });
 
         public void RemoveFromWhitelist(string name, ulong id, bool isChannel)
         {

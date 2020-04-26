@@ -32,7 +32,11 @@ namespace GLR.Core.Commands
 
         private bool CommandIsAllowedToRun(GuildAccount guild)
         {
-            var currentCommand = guild.Commands.Find(x => x.Name == $"{_currentCommand.Module.Name}_{_currentCommand.Name}".ToLower());
+            var currentCommand = guild.Commands.Find(x => x.Name == ExpandedCommandName);
+            // If command doesn't exist in database, recreate it.
+            if (currentCommand == null) guild.AddNewCommand(_currentCommand);
+            Accounts.SaveGuildAccount(guild);
+
             var userRoles = (Context.User as SocketGuildUser).Roles.ToList();
             
             if (!currentCommand.IsEnabled) return false;
