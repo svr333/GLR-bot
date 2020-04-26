@@ -82,5 +82,11 @@ namespace GLR.Core.Commands.Modules
         [Command("rickert")]
         public async Task Rickert()
             => await Context.Channel.SendFileAsync("assets/rickert.mp4");
+
+        [Command("pyha")]
+        public async Task Pyha()
+            => await ReplyAsync("", false, new EmbedBuilder()
+            .WithImageUrl("https://cdn.discordapp.com/attachments/694261545840017449/704097544967553104/20181229_091342.gif")
+            .Build());
     }
 }
