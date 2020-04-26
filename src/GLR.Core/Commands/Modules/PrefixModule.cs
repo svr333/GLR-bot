@@ -18,7 +18,7 @@ namespace GLR.Core.Commands.Modules
 
 
         [Command("prefixadd")][Alias("padd")]
-        public async Task AddPrefix(string prefix)
+        public async Task AddPrefix([Remainder]string prefix)
         {
             var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
             guild.AddPrefix(prefix);
@@ -28,7 +28,7 @@ namespace GLR.Core.Commands.Modules
         }
 
         [Command("prefixremove")][Alias("premove")]
-        public async Task RemovePrefix(string prefix)
+        public async Task RemovePrefix([Remainder]string prefix)
         {
             var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
             guild.RemovePrefix(prefix);
