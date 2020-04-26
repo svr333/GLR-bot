@@ -60,5 +60,18 @@ namespace GLR.Core.Commands.Modules
         [Command("acer")]
         public async Task Acer()
             => await ReplyAsync("Acer be like:\nhttps://www.youtube.com/watch?v=cpZma0JjwIo");
+
+        [Command("teren")]
+        public async Task Teren()
+            =>  await ReplyAsync("", false, 
+            new EmbedBuilder()
+            .WithImageUrl("https://media.discordapp.net/attachments/638859930736132097/702900229044699216/terenwhen18yr.gif")
+            .Build());
+
+        [Command("major")][Alias("majorworm")]
+        public async Task Majorworm()
+            => await ReplyAsync("🤏🏿<:AFCMajor_Wor:700368330246193152>", false, new EmbedBuilder()
+            .WithImageUrl("https://i.redd.it/7658ht4u91o41.jpg")
+            .Build());
     }
 }
