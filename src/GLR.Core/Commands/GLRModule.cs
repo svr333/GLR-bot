@@ -33,8 +33,10 @@ namespace GLR.Core.Commands
         private bool CommandIsAllowedToRun(GuildAccount guild)
         {
             var currentCommand = guild.Commands.Find(x => x.Name == $"{_currentCommand.Module.Name}_{_currentCommand.Name}".ToLower());
+            var userRoles = (Context.User as SocketGuildUser).Roles.ToList();
             
             if (!currentCommand.IsEnabled) return false;
+            if (userRoles.Find(x => x.Id == guild.ModRoleId) != null) return true;
 
             var userHasRoleInList = UserHasRoleInList(currentCommand);
             if (currentCommand.RolesListIsBlacklist && userHasRoleInList
