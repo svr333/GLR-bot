@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Discord.WebSocket;
 using GLR.Core.Commands.Preconditions;
 using GLR.Core.Services.DataStorage;
 
@@ -88,6 +89,17 @@ namespace GLR.Core.Commands.Modules
 
             _accounts.SaveGuildAccount(guild);
             await ReplyAsync($"Succesfully {action}ed id `{id}` to the list.");
+        }
+
+        [Command("modrole")]
+        public async Task SetModRole(SocketRole role)
+        {
+            var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
+            guild.SetModRole(role.Id);
+            _accounts.SaveGuildAccount(guild);
+
+            await ReplyAsync($"Modrole has successfully been changed to `{role.Name}`\n" +
+                            $"{role.Members.Count()} can now access all enabled commands anywhere.")
         }
 
         private string FormatName(CommandInfo command)

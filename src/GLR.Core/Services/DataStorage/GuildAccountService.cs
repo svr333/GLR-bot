@@ -20,8 +20,7 @@ namespace GLR.Core.Services.DataStorage
         {
             if (!_storage.Exists<GuildAccount>(x => x.Id == id))
                 CreateGuildAccount(id);
-            var guildAcc = GetGuildAccount(id);
-            return guildAcc;
+            return GetGuildAccount(id);
         }
 
         private void CreateGuildAccount(ulong id)

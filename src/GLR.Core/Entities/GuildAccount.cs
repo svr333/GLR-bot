@@ -9,6 +9,7 @@ namespace GLR.Core.Entities
         #region Properties
         public ulong Id { get; set; }
         public List<string> Prefixes { get; set; }
+        public ulong ModRoleId { get; set; }
         public List<CommandSettings> Commands { get; set; }
 
         #endregion
@@ -87,5 +88,8 @@ namespace GLR.Core.Entities
             var command = Commands.Find(x => x.Name == name);
             command.IsEnabled = false;
         }
+
+        public void SetModRole(ulong id)
+            => ModRoleId = id;
     }
 }
