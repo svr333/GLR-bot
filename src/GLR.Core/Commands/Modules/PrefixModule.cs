@@ -5,7 +5,7 @@ using GLR.Core.Services.DataStorage;
 
 namespace GLR.Core.Commands.Modules
 {
-    [RequireSvr]
+    [RequireGLRPermission]
     public class PrefixModule : GLRModule
     {
         private GuildAccountService _accounts;
