@@ -53,7 +53,6 @@ namespace GLR.Core.Services.DataStorage
                 var collection = db.GetCollection<T>();
                 return collection.Exists(predicate);
             }
-            
         }
     }
 }
