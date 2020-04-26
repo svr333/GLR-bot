@@ -15,9 +15,11 @@ namespace GLR.Core.Commands.Modules
         [Command("maxim")]
         public async Task Maxim()
         {
-            await ReplyAsync("", false, new EmbedBuilder() { Title = "Maxim is so fucking gay that he ..."}
-            .WithFooter("Finish the sentence like a boss").Build());
-            await Context.Channel.SendFileAsync("assets/maxim.mp4");
+            await ReplyAsync("", false, new EmbedBuilder()
+            .WithTitle("Maxim is such a horny boy")
+            .WithImageUrl("https://media.discordapp.net/attachments/638859930736132097/700444938701111336/image0-35-1.gif")
+            .Build());
+            //await Context.Channel.SendFileAsync("assets/maxim.mp4");
         }
 
         [Command("marido")]
