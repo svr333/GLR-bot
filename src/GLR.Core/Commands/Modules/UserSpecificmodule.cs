@@ -65,9 +65,14 @@ namespace GLR.Core.Commands.Modules
 
         [Command("teren")]
         public async Task Teren()
-            =>  await ReplyAsync("", false, 
-            new EmbedBuilder()
+            =>  await ReplyAsync("", false, new EmbedBuilder()
             .WithImageUrl("https://media.discordapp.net/attachments/638859930736132097/702900229044699216/terenwhen18yr.gif")
+            .Build());
+
+        [Command("teren2")]
+        public async Task Teren2()
+            => await ReplyAsync("", false, new EmbedBuilder()
+            .WithImageUrl("https://media.discordapp.net/attachments/621747527724695595/696098296623661094/tukey_man.gif")
             .Build());
 
         [Command("major")][Alias("majorworm")]
