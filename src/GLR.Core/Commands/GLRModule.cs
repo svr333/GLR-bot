@@ -37,6 +37,8 @@ namespace GLR.Core.Commands
             if (currentCommand == null) guild.AddNewCommand(_currentCommand);
             Accounts.SaveGuildAccount(guild);
 
+            currentCommand = guild.Commands.Find(x => x.Name == ExpandedCommandName);
+
             var userRoles = (Context.User as SocketGuildUser).Roles.ToList();
             
             if (!currentCommand.IsEnabled) return false;
