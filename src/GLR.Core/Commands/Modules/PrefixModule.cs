@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using GLR.Core.Commands.Preconditions;
 using GLR.Core.Services.DataStorage;
 
 namespace GLR.Core.Commands.Modules
 {
-    [RequireGLRPermission]
+    [RequireGLRPermission(GuildPermission.ManageGuild)]
     public class PrefixModule : GLRModule
     {
         private GuildAccountService _accounts;
@@ -40,7 +41,7 @@ namespace GLR.Core.Commands.Modules
         public async Task ListPrefix()
         {
             var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
-            
+
             await ReplyAsync($"Prefixes for **{Context.Guild.Name}**:\n" +
                             $"▬▬▬▬▬▬▬▬▬▬▬▬\n" + 
                             $"`{string.Join("`, `", guild.Prefixes)}`");
