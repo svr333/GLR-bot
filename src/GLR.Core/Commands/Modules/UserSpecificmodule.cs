@@ -72,8 +72,6 @@ namespace GLR.Core.Commands.Modules
 
         [Command("major")][Alias("majorworm")]
         public async Task Majorworm()
-            => await ReplyAsync("🤏🏿<:AFCMajor_Wor:700368330246193152>", false, new EmbedBuilder()
-            .WithImageUrl("https://i.redd.it/7658ht4u91o41.jpg")
-            .Build());
+            => await ReplyAsync("🤏🏿<:AFCMajor_Wor:700368330246193152>");
     }
 }
