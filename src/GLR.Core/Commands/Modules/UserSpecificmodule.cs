@@ -73,5 +73,9 @@ namespace GLR.Core.Commands.Modules
         [Command("major")][Alias("majorworm")]
         public async Task Majorworm()
             => await ReplyAsync("🤏🏿<:AFCMajor_Wor:700368330246193152>");
+
+        [Command("rickert")]
+        public async Task Rickert()
+            => await Context.Channel.SendFileAsync("assets/rickert.mp4");
     }
 }
