@@ -99,7 +99,7 @@ namespace GLR.Core.Commands.Modules
             _accounts.SaveGuildAccount(guild);
 
             await ReplyAsync($"Modrole has successfully been changed to `{role.Name}`\n" +
-                            $"{role.Members.Count()} can now access all enabled commands anywhere.")
+                            $"{role.Members.Count()} can now access all enabled commands anywhere.");
         }
 
         private string FormatName(CommandInfo command)
