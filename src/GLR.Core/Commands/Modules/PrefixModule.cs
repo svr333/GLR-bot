@@ -21,8 +21,8 @@ namespace GLR.Core.Commands.Modules
         {
             var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
             guild.AddPrefix(prefix);
-
             _accounts.SaveGuildAccount(guild);
+
             await ReplyAsync($"Successfully added `{prefix}` to the current list.");
         }
 
@@ -31,8 +31,8 @@ namespace GLR.Core.Commands.Modules
         {
             var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
             guild.RemovePrefix(prefix);
-
             _accounts.SaveGuildAccount(guild);
+
             await ReplyAsync($"Successfully removed `{prefix}` from the current list.");
         }
 
@@ -40,7 +40,10 @@ namespace GLR.Core.Commands.Modules
         public async Task ListPrefix()
         {
             var guild = _accounts.GetOrCreateGuildAccount(Context.Guild.Id);
-            await ReplyAsync(string.Join(", ", guild.Prefixes));
+            
+            await ReplyAsync($"Prefixes for **{Context.Guild.Name}**:\n" +
+                            $"▬▬▬▬▬▬▬▬▬▬▬▬\n" + 
+                            $"`{string.Join("`, `", guild.Prefixes)}`");
         }
     }
 }
