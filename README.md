@@ -62,7 +62,7 @@ Once you have screen installed, just do:
 
 I recommend watching a tutorial on screen to figure out how it works exactly.
 
-On Windows / mac: Install linux and follow the steps above.
+On Windows / mac: Install linux and follow the steps above.  
 This is a very brief explanation and I didn't spend too much time on it, you'll probably have to look a few things up, but the gist is there.
 I also don't think it is necessary to build the bot yourself, since it is still in development and not the most stable.  
 Also, yes, this paragraph is only done so this file has 69 lines of 'code'.
