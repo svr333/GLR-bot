@@ -48,12 +48,13 @@ namespace GLR.Core.Commands.Modules
         {
             if (string.IsNullOrEmpty(user)) user = Context.User.Username;
 
-            var id = await _profileService.GetIdAsync(user);
-            var cachedFriends = await _profileService.GetFriendsAsync(id);
+            var profile = await _profileService.GetFullProfileAsync(user);
+            var cachedFriends = await _profileService.GetFriendsAsync(profile.Id);
+            if (cachedFriends is null) await ReplyAsync("User doesn't have any friends!");
             
-            var displayTexts = cachedFriends.Select(x => x is null ? "Profile not cached in local database." : $"{x.RankInfo.Rank}: **{x.Username}** ({x.Id})");
-
-            await ReplyAsync(string.Join("\n", displayTexts));
+            var displayTexts = cachedFriends.Select(x => x is null ? "Profile not cached in local database." : $"{x.RankInfo.Rank}: **{x.Username}** ({x.Id})").ToList();
+            if (displayTexts.Count() >= 10) await ReplyAsync("You have more than 10 friends, and I haven't implemented paginator yet, sorry.");
+            else await ReplyAsync(string.Join("\n", displayTexts));
         }
     }
 }
