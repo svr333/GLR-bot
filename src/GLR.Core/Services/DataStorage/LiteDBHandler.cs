@@ -42,7 +42,7 @@ namespace GLR.Core.Services.DataStorage
             using (var db = new LiteDatabase(_dbFileName))
             {
                 var collection = db.GetCollection<T>();
-                return collection.Find(predicate).First();
+                return collection.Find(predicate).FirstOrDefault();
             }
         }
 
