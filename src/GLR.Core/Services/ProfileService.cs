@@ -39,7 +39,7 @@ namespace GLR.Core.Services
             return profile;
         }
 
-        private async Task<ulong> GetIdAsync(string input)
+        public async Task<ulong> GetIdAsync(string input)
         {
             // check if input is username
             var response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={input}&t=i");

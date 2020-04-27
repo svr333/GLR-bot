@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using GLR.Core.Services;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GLR.Core.Commands.Modules
@@ -40,6 +41,19 @@ namespace GLR.Core.Commands.Modules
                 .Build();
 
             await ReplyAsync("", false, embed);
+        }
+
+        [Command("friends")]
+        public async Task Friends(string user = "")
+        {
+            if (string.IsNullOrEmpty(user)) user = Context.User.Username;
+
+            var id = await _profileService.GetIdAsync(user);
+            var cachedFriends = await _profileService.GetFriendsAsync(id);
+            
+            var displayTexts = cachedFriends.Select(x => x is null ? "Profile not cached in local database." : $"{x.RankInfo.Rank}: **{x.Username}** ({x.Id})");
+
+            await ReplyAsync(string.Join("\n", displayTexts));
         }
     }
 }
