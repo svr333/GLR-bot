@@ -53,7 +53,7 @@ namespace GLR.Core.Commands.Modules
             if (cachedFriends is null) await ReplyAsync("User doesn't have any friends!");
             
             var displayTexts = cachedFriends.Select(x => x is null ? "Profile not cached in local database." : $"{x.RankInfo.Rank}: **{x.Username}** ({x.Id})").ToList();
-            if (displayTexts.Count() >= 10) await ReplyAsync("You have more than 10 friends, and I haven't implemented paginator yet, sorry.");
+            if (displayTexts.Count() > 10) await ReplyAsync("You have more than 10 friends, and I haven't implemented paginator yet, sorry.");
             else await ReplyAsync(string.Join("\n", displayTexts));
         }
     }
