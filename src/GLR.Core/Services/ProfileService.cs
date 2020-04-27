@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GLR.Core.Entities;
+using GLR.Core.Services.DataStorage;
 
 namespace GLR.Core.Services
 {
     public class ProfileService
     {
         private HttpClient _webClient;
+        private GLRProfileHandler _storage;
 
-        public ProfileService()
+        public ProfileService(GLRProfileHandler storage)
         {
             _webClient = new HttpClient();
+            _storage = storage;
         }
         
         internal async Task<Profile> GetFullProfileAsync(string input)
@@ -32,6 +35,7 @@ namespace GLR.Core.Services
             profile.RankInfo = await GetRankInfoAsync(profile.Id);
             profile.CreationDate = await GetCreationDateAsync(profile.Id);
 
+            _storage.StoreProfile(profile);
             return profile;
         }
 
@@ -120,21 +124,19 @@ namespace GLR.Core.Services
             var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
             var friendsAsString = await result.Content.ReadAsStringAsync();
 
-            var friendIds = friendsAsString.Split(", ");
-            if (friendIds[0] == "") friendIds = null;
+            var friendStringIds = friendsAsString.Split(", ");
+            if (friendStringIds[0] == "") friendStringIds = null;
 
-            if (friendIds is null) return null;
+            if (friendStringIds is null) return null;
 
-            var friends = new List<Profile>();
-
-            for (int i = 0; i < friendIds.Length; i++)
+            var friendIds = new List<ulong>();
+            
+            foreach (var stringId in friendStringIds)
             {
-                var currentFriend = await GetFullProfileAsync(friendIds[i]);
-                friends.Add(currentFriend);
+                friendIds.Add(ulong.Parse(stringId));
             }
 
-            Console.WriteLine((DateTime.Now - start).TotalMilliseconds);
-            return friends;
+            return _storage.RetrieveManyProfiles(friendIds);
         }
     }
 }
