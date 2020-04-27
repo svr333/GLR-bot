@@ -29,6 +29,10 @@ namespace GLR.Core.Services.DataStorage
         }
 
         public void StoreProfile(Profile profile)
-            => _db.Store<Profile>(profile);
+        {
+            if (_db.Exists<Profile>(x => x.Id == profile.Id))
+                _db.Update(profile);
+            else _db.Store<Profile>(profile);
+        }
     }
 }
