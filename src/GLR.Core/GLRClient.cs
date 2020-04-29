@@ -20,7 +20,7 @@ namespace GLR.Core
         {
             _client = client ?? new DiscordSocketClient(new DiscordSocketConfig
             {
-                LogLevel = LogSeverity.Debug,
+                LogLevel = LogSeverity.Error,
                 AlwaysDownloadUsers = true,
                 MessageCacheSize = 1000
             });
@@ -28,7 +28,7 @@ namespace GLR.Core
             _commands = commands ?? new CommandService(new CommandServiceConfig
             {
                 CaseSensitiveCommands = false,
-                LogLevel = LogSeverity.Verbose,
+                LogLevel = LogSeverity.Error,
                 SeparatorChar = '|'
             });
         }
@@ -38,6 +38,7 @@ namespace GLR.Core
             _services = ConfigureServices();
 
             _client.Ready += OnReadyAsync;
+            _client.Disconnected += OnDisconnected;
 
             _client.Log += LogAsync;
             _commands.Log += LogAsync;
@@ -50,6 +51,9 @@ namespace GLR.Core
             await _services.GetRequiredService<CommandHandlerService>().InitializeAsync();
             await Task.Delay(-1);
         }
+
+        private async Task OnDisconnected(Exception error)
+            => Console.WriteLine(error);
 
         private async Task LogAsync(LogMessage msg)
             => Console.WriteLine($"{msg.Source}: {msg.Message}");
@@ -67,6 +71,7 @@ namespace GLR.Core
                 .AddSingleton<LiteDBHandler>()
                 .AddSingleton<GuildAccountService>()
                 .AddSingleton<GLRProfileHandler>()
+                .AddSingleton<PaginatorService>()
                 .BuildServiceProvider();
         }
     }

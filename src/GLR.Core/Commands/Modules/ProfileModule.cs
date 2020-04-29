@@ -43,7 +43,7 @@ namespace GLR.Core.Commands.Modules
             await ReplyAsync("", false, embed);
         }
 
-        [Command("friends")]
+        [Command("friends", RunMode = RunMode.Async)]
         public async Task Friends(string user = "")
         {
             if (string.IsNullOrEmpty(user)) user = Context.User.Username;
@@ -53,8 +53,13 @@ namespace GLR.Core.Commands.Modules
             if (cachedFriends is null) await ReplyAsync("User doesn't have any friends!");
             
             var displayTexts = cachedFriends.Select(x => x is null ? "Profile not cached in local database." : $"{x.RankInfo.Rank}: **{x.Username}** ({x.Id})").ToList();
-            if (displayTexts.Count() > 10) await ReplyAsync("You have more than 10 friends, and I haven't implemented paginator yet, sorry.");
-            else await ReplyAsync(string.Join("\n", displayTexts));
+
+            var templateEmbed = new EmbedBuilder()
+                                .WithTitle($"Friends for {profile.Username}")
+                                .WithColor(Color.DarkBlue);
+            await SendPaginatedMessage(displayTexts, templateEmbed);
+            // if (displayTexts.Count() > 10) await ReplyAsync("You have more than 10 friends, and I haven't implemented paginator yet, sorry.");
+            // else await ReplyAsync(string.Join("\n", displayTexts));
         }
     }
 }
