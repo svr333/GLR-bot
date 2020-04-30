@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -16,11 +18,13 @@ namespace GLR.Core.Services.Commands
         private IEmote _first = new Emoji("⏮️");
         private IEmote _last = new Emoji("️⏭️");
         private List<PaginatedMessage> _activeMessages;
+        private ConcurrentDictionary<ulong, Timer> _activeTimers;
         private DiscordSocketClient _client;
 
         public PaginatorService(DiscordSocketClient client)
         {
             _activeMessages = new List<PaginatedMessage>();
+            _activeTimers = new ConcurrentDictionary<ulong, Timer>();
             _client = client;
             _client.ReactionAdded += OnReactionUpdated;
             _client.ReactionRemoved += OnReactionUpdated;
@@ -37,21 +41,62 @@ namespace GLR.Core.Services.Commands
             else if (reaction.Emote.Name == _previous.Name) await GoToPreviousPageAsync(message.Id);
             else if (reaction.Emote.Name == _next.Name) await GoToNextPageAsync(message.Id);
             else if (reaction.Emote.Name == _last.Name) await GoToLastPageAsync(message.Id);
+            ResetTimer(message.Id);
         }
 
         public async Task<IUserMessage> HandleNewPaginatedMessageAsync(SocketCommandContext context, IEnumerable<string> displayTexts, Embed embed)
         {
             var message = await context.Channel.SendMessageAsync("", false, embed);
-            var test = new PaginatedMessage()
+            var paginatedMessage = new PaginatedMessage()
             {
                 DiscordMessageId = message.Id,
                 DiscordChannelId = message.Channel.Id,
                 DisplayMessages = displayTexts.ToArray()
             };
-            _activeMessages.Add(test);
-
+            _activeMessages.Add(paginatedMessage);
+            
+            if (paginatedMessage.TotalPages == 1) return message;
+            
             await AddPaginatorReactions(message);
+            AddNewTimer(message.Id);
+            
             return message;
+        }
+
+        public void AddNewTimer(ulong messageId)
+        {
+            var timer = new Timer();
+            timer.Interval = 10000;
+            timer.Start();
+            timer.Elapsed += DisposeActivePaginatorMessage;
+            _activeTimers.TryAdd(messageId, timer);
+        }
+
+        private void DisposeActivePaginatorMessage(object timerObj, ElapsedEventArgs e)
+        {
+            var timer = timerObj as Timer;
+            
+            var messageId = _activeTimers.First(x => x.Value == timer).Key;
+            timer.Enabled = false;
+
+            var paginatorMessage = _activeMessages.First(x => x.DiscordMessageId == messageId);
+            var channel = _client.GetChannel(paginatorMessage.DiscordChannelId) as SocketTextChannel;
+            var message = channel.GetMessageAsync(paginatorMessage.DiscordMessageId).GetAwaiter().GetResult() as SocketUserMessage;
+            message.RemoveAllReactionsAsync().GetAwaiter().GetResult();
+            
+            _activeMessages.Remove(paginatorMessage);
+            _activeTimers.TryRemove(messageId, out Timer oldTimer);
+            timer.Dispose();
+        }
+
+        public void ResetTimer(ulong messageId)
+        {
+            _activeTimers.TryRemove(messageId, out Timer currentTimer);
+
+            currentTimer.Stop();
+            currentTimer.Start();
+            
+            _activeTimers.TryAdd(messageId, currentTimer);
         }
 
         private async Task AddPaginatorReactions(IUserMessage message)
