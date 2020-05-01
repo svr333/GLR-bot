@@ -163,7 +163,7 @@ namespace GLR.Core.Services
                 Level = ulong.Parse(values[5]),
                 GalaxyName = values[6],
                 AttackStatus = attackStatus,
-                LastOnline = DateTime.Parse(values[8]),
+                LastOnline = values[8] == "Unknown" ? DateTime.MinValue : DateTime.Parse(values[8]),
                 Status = status,
                 MissionsCompleted = ulong.Parse(values[10])
             };
