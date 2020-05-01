@@ -147,6 +147,8 @@ namespace GLR.Core.Services
             var response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=m");
             var statisticsCsv = await response.Content.ReadAsStringAsync();
 
+            if (string.IsNullOrEmpty(statisticsCsv)) throw new Exception("Stats404");
+
             var values = statisticsCsv.Split(", ");
             Enum.TryParse(values[7], out AttackStatus attackStatus);
             Enum.TryParse(values[9], out Status status);

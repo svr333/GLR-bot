@@ -56,7 +56,7 @@ namespace GLR.Core.Services.Commands
 
         private async Task OnCommandExecuted(Optional<CommandInfo> cmd, ICommandContext ctx, IResult result)
         {
-            if (result.IsSuccess) 
+            if (result.IsSuccess)
             {
                 await ctx.Message.AddReactionAsync(new Emoji("✅"));
                 return;
@@ -75,7 +75,11 @@ namespace GLR.Core.Services.Commands
                 case "Profile404": await ctx.Channel.SendMessageAsync($"Galaxy Life Reborn profile for `{ctx.Message.Content.Remove(0, 9)}` not found.");
                 break;
 
-                case "User has insuffient permission to execute command.": break;
+                case "Stats404": await ctx.Channel.SendMessageAsync("This user has never logged on before.");
+                break;
+
+                case "User has insuffient permission to execute command.":
+                break;
 
                 default: await SendDefaultErrorMessage(ctx, cmd.Value, result.ErrorReason);
                 break;
