@@ -10,12 +10,10 @@ namespace GLR.Core.Services
     public class ProfileService
     {
         private HttpClient _webClient;
-        private GLRProfileHandler _storage;
 
-        public ProfileService(GLRProfileHandler storage)
+        public ProfileService()
         {
             _webClient = new HttpClient();
-            _storage = storage;
         }
         
         internal async Task<Profile> GetFullProfileAsync(string input)
@@ -34,8 +32,7 @@ namespace GLR.Core.Services
 
             profile.RankInfo = await GetRankInfoAsync(profile.Id);
             profile.CreationDate = await GetCreationDateAsync(profile.Id);
-
-            _storage.StoreProfile(profile);
+            
             return profile;
         }
 

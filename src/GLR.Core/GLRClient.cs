@@ -70,7 +70,6 @@ namespace GLR.Core
                 .AddSingleton<ProfileService>()
                 .AddSingleton<LiteDBHandler>()
                 .AddSingleton<GuildAccountService>()
-                .AddSingleton<GLRProfileHandler>()
                 .AddSingleton<PaginatorService>()
                 .BuildServiceProvider();
         }
