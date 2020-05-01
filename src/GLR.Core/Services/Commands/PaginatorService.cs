@@ -41,6 +41,7 @@ namespace GLR.Core.Services.Commands
             else if (reaction.Emote.Name == _previous.Name) await GoToPreviousPageAsync(message.Id);
             else if (reaction.Emote.Name == _next.Name) await GoToNextPageAsync(message.Id);
             else if (reaction.Emote.Name == _last.Name) await GoToLastPageAsync(message.Id);
+            else return;
             ResetTimer(message.Id);
         }
 
@@ -66,7 +67,7 @@ namespace GLR.Core.Services.Commands
         public void AddNewTimer(ulong messageId)
         {
             var timer = new Timer();
-            timer.Interval = 10000;
+            timer.Interval = 30000;
             timer.Start();
             timer.Elapsed += DisposeActivePaginatorMessage;
             _activeTimers.TryAdd(messageId, timer);
@@ -104,7 +105,8 @@ namespace GLR.Core.Services.Commands
             await message.AddReactionAsync(_first);
             await message.AddReactionAsync(_previous);
             await message.AddReactionAsync(_next);
-            //await message.AddReactionAsync(_last);
+            await message.AddReactionAsync(_last);
+            
         }
 
         private async Task HandleUpdateMessagePagesAsync(PaginatedMessage msg)
@@ -127,7 +129,7 @@ namespace GLR.Core.Services.Commands
                 Url = oldEmbed.Url
             }
             //.WithAuthor(oldEmbed.Author.Value.Name, oldEmbed.Author.Value.IconUrl, oldEmbed.Author.Value.Url)
-            //.WithFooter(oldEmbed.Footer.Value.Text, oldEmbed.Footer.Value.IconUrl)
+            .WithFooter(oldEmbed.Footer.Value.Text, oldEmbed.Footer.Value.IconUrl)
             .Build();
 
             await message.ModifyAsync(x => x.Embed = newEmbed);

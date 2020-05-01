@@ -118,10 +118,9 @@ namespace GLR.Core.Services
             return DateTime.Parse(stringDate);
         }
 
-        public async Task<List<Profile>> GetFriendsAsync(ulong id)
+        public async Task<List<SimpleProfile>> GetFriendsAsync(ulong id)
         {
-            var start = DateTime.Now;
-            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f");
+            var result = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=f_new");
             var friendsAsString = await result.Content.ReadAsStringAsync();
 
             var friendStringIds = friendsAsString.Split(", ");
@@ -129,14 +128,46 @@ namespace GLR.Core.Services
 
             if (friendStringIds is null) return null;
 
-            var friendIds = new List<ulong>();
+
+            var friends = new List<SimpleProfile>();
             
             foreach (var stringId in friendStringIds)
             {
-                friendIds.Add(ulong.Parse(stringId));
+                var data = stringId.Split('-');
+
+                friends.Add(new SimpleProfile()
+                {
+                    Id = ulong.Parse(data[1]),
+                    Username = data[0]
+                });
             }
 
-            return _storage.RetrieveManyProfiles(friendIds);
+            return friends;
+        }
+    
+        public async Task<Statistics> GetUserStatisticsAsync(ulong id)
+        {
+            var response = await _webClient.GetAsync($"https://galaxylifereborn.com/api/userinfo?u={id}&t=m");
+            var statisticsCsv = await response.Content.ReadAsStringAsync();
+
+            var values = statisticsCsv.Split(", ");
+            Enum.TryParse(values[7], out AttackStatus attackStatus);
+            Enum.TryParse(values[9], out Status status);
+
+            return new Statistics()
+            {
+                Username = values[0],
+                AllianceName = values[1],
+                ExperiencePoints = ulong.Parse(values[2]),
+                Starbase = ulong.Parse(values[3]),
+                Colonies = ulong.Parse(values[4]),
+                Level = ulong.Parse(values[5]),
+                GalaxyName = values[6],
+                AttackStatus = attackStatus,
+                LastOnline = DateTime.Parse(values[8]),
+                Status = status,
+                MissionsCompleted = ulong.Parse(values[10])
+            };
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
+using GLR.Core.Entities;
 using GLR.Core.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,17 +51,40 @@ namespace GLR.Core.Commands.Modules
             if (string.IsNullOrEmpty(user)) user = Context.User.Username;
 
             var profile = await _profileService.GetFullProfileAsync(user);
-            var cachedFriends = await _profileService.GetFriendsAsync(profile.Id);
-            if (cachedFriends is null) await ReplyAsync("User doesn't have any friends!");
+            var friends = await _profileService.GetFriendsAsync(profile.Id);
+            if (friends is null) await ReplyAsync("User doesn't have any friends!");
             
-            var displayTexts = cachedFriends.Select(x => x is null ? "Profile not cached in local database." : $"{x.RankInfo.Rank}: **{x.Username}** ({x.Id})").ToList();
+            var displayTexts = friends.Select(x => $"**{x.Username}** ({x.Id})");
 
             var templateEmbed = new EmbedBuilder()
                                 .WithTitle($"Friends for {profile.Username}")
-                                .WithColor(Color.DarkBlue);
+                                .WithColor(Color.DarkBlue)
+                                .WithAuthor("", "", "")
+                                .WithFooter("Friends are ordered by day you added them.", "");
             await SendPaginatedMessage(displayTexts, templateEmbed);
-            // if (displayTexts.Count() > 10) await ReplyAsync("You have more than 10 friends, and I haven't implemented paginator yet, sorry.");
-            // else await ReplyAsync(string.Join("\n", displayTexts));
+        }
+
+        [Command("statistics")][Alias("stats")]
+        public async Task Stats(string user = "")
+        {
+            if (string.IsNullOrEmpty(user)) user = Context.User.Username;
+            var id = await _profileService.GetIdAsync(user);
+
+            var stats = await _profileService.GetUserStatisticsAsync(id);
+
+            var statusEmote = stats.Status == Status.Online ? "<:online:705571366622986351>" : "<:offline:705571366614597722>";
+
+            await ReplyAsync("", false, new EmbedBuilder()
+            {
+                Title = $"Statistics for {stats.Username} ({id})",
+                Color = Color.DarkMagenta,
+                ThumbnailUrl = $"https://galaxylifereborn.com/uploads/avatars/{id}.png?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}",
+                Description = $"\u200b\n<:exp:705566339070296104> {stats.Level} \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:starbase:705566339078815755> {stats.Starbase}" +
+                              $"\n<:colonies:705566339120758864> {stats.Colonies} \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:quest:705569878169485334> {stats.MissionsCompleted}" +
+                              $"\n{statusEmote} {stats.Status} \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:lastonline:705566339179216957> {stats.LastOnline.ToShortDateString()}\n\u200b"
+            }
+            .WithFooter($"Requested by {Context.User.Username} | {Context.User.Id}")
+            .Build());
         }
     }
 }

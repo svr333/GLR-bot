@@ -73,9 +73,6 @@ namespace GLR.Core.Commands
     
         public async Task<IUserMessage> SendPaginatedMessage(IEnumerable<string> displayTexts, EmbedBuilder templateEmbed)
         {
-            // TODO: Implement timers so they clear after 1 min
-            var delayTimer = new Timer();
-
             templateEmbed.WithTitle($"{templateEmbed.Title} | Page 1");
             templateEmbed = templateEmbed.WithDescription(string.Join("\n", displayTexts.Take(10)));
             
