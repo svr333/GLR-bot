@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GLR.Core.Entities;
-using GLR.Core.Services.DataStorage;
 
 namespace GLR.Core.Services
 {

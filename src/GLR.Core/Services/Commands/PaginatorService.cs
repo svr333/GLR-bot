@@ -128,7 +128,6 @@ namespace GLR.Core.Services.Commands
                 Color = oldEmbed.Color,
                 Url = oldEmbed.Url
             }
-            //.WithAuthor(oldEmbed.Author.Value.Name, oldEmbed.Author.Value.IconUrl, oldEmbed.Author.Value.Url)
             .WithFooter(oldEmbed.Footer.Value.Text, oldEmbed.Footer.Value.IconUrl)
             .Build();
 
