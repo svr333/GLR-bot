@@ -97,7 +97,7 @@ namespace GLR.Core.Commands.Modules
 
         [Command("rickert3")]
         public async Task Rickert3()
-            => await Context.Channel.SendFileAsync("assets/rickert3.mp4")
+            => await Context.Channel.SendFileAsync("assets/rickert3.mp4");
 
         [Command("pyha")]
         public async Task Pyha()
