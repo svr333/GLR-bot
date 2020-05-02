@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using GLR.Core.Commands.Preconditions;
@@ -8,7 +9,7 @@ using GLR.Core.Services.DataStorage;
 
 namespace GLR.Core.Commands.Modules
 {
-    [RequireGLRPermission]
+    [RequireGLRPermission(GuildPermission.ManageGuild)]
     public class CommandPermissionsModule : GLRModule
     {
         private GuildAccountService _accounts;
