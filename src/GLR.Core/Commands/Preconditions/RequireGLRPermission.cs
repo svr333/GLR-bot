@@ -19,7 +19,6 @@ namespace GLR.Core.Commands.Preconditions
             if (context.User.Id == 202095042372829184) return Task.FromResult(PreconditionResult.FromSuccess());
 
             var guildUser = context.User as SocketGuildUser;
-            System.Console.WriteLine(guildUser.GuildPermissions.RawValue);
 
             if (guildUser.GuildPermissions.Has(_permission) || guildUser.GuildPermissions.Has(GuildPermission.Administrator))
                 return Task.FromResult(PreconditionResult.FromSuccess());
