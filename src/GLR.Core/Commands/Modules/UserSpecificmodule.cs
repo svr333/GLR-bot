@@ -26,6 +26,10 @@ namespace GLR.Core.Commands.Modules
         public async Task Marido()
             => await Context.Channel.SendFileAsync("assets/marido.mp4");
 
+        [Command("marido2")]
+        public async Task Marido2()
+            => await Context.Channel.SendFileAsync("assets/marido2.mp4");
+
         [Command("tom")][Alias("inika", "bg", "jerry")]
         public async Task Bg()
             => await ReplyAsync("Tom and Jerry are the biggest bg (not big gay)");
@@ -63,6 +67,10 @@ namespace GLR.Core.Commands.Modules
         public async Task Acer()
             => await ReplyAsync("Acer be like:\nhttps://www.youtube.com/watch?v=cpZma0JjwIo");
 
+        [Command("acer2")][Alias("fish")]
+        public async Task Acer2()
+            => await Context.Channel.SendFileAsync("assets/acer2.mp4");
+
         [Command("teren")]
         public async Task Teren()
             =>  await ReplyAsync("", false, new EmbedBuilder()
@@ -82,6 +90,10 @@ namespace GLR.Core.Commands.Modules
         [Command("rickert")]
         public async Task Rickert()
             => await Context.Channel.SendFileAsync("assets/rickert.mp4");
+
+        [Command("rickert2")]
+        public async Task Rickert2()
+            => await Context.Channel.SendFileAsync("assets/rickert2.mp4");
 
         [Command("pyha")]
         public async Task Pyha()
