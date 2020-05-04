@@ -49,7 +49,11 @@ namespace GLR.Core.Commands.Modules
 
         [Command("aniela")]
         public async Task Aniela()
-            => await ReplyAsync("Idk some yiff furry shit, #FurrysAreGood");
+            => await ReplyAsync("Holy fuck i want to bang the xcom snake so badly" +
+                                "\nI've seen every rule34 piece with her and i still don't have enough" +
+                                "\nWhenever i start up any mission i get a raging boner thinking about her long snake tongue licking my cock clean and only leaving her poisonous spit behind" +
+                                "\nI want her to embrace me and crack every single one of my ribs while i suffocate to death" +
+                                "\nI don't even care what does ADVENT do to humans i just want to bang that snake");
 
         [Command("whirl")]
         public async Task WhirlDies()
