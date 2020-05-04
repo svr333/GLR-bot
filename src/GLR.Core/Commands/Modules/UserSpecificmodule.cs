@@ -43,6 +43,10 @@ namespace GLR.Core.Commands.Modules
             await ReplyAsync("<a:miro2:696692388218798140> <a:miro:696692388130717727>", false, embed);
         }
 
+        [Command("nudes2")]
+        public async Task Nudes2()
+            => await Context.Channel.SendFileAsync("assets/nudes2.mp4");
+
         [Command("aniela")]
         public async Task Aniela()
             => await ReplyAsync("Idk some yiff furry shit, #FurrysAreGood");
