@@ -6,11 +6,15 @@ namespace GLR.Core.Commands.Modules
 {
     public class UserSpecificModule : GLRModule
     {
-        [Command("don")][Alias("naitoo", "chubi")]
+        [Command("don")][Alias("naitoo")]
         public async Task Don()
         {
             await ReplyAsync("🐝 <:AAAStarling_Happy:700370912486359141>");
         }
+
+        [Command("chubi")]
+        public async Task Chubi()
+            => await ReplyAsync("Cringetard haha ticket");
 
         [Command("maxim")]
         public async Task Maxim()
@@ -95,6 +99,18 @@ namespace GLR.Core.Commands.Modules
         public async Task Majorworm()
             => await ReplyAsync("🤏🏿<:AFCMajor_Wor:700368330246193152>");
 
+        [Command("major2")]
+        public async Task Major2()
+            => await ReplyAsync("", false, new EmbedBuilder()
+            {
+                ImageUrl = "https://cdn.discordapp.com/attachments/428285688794972201/707200168700805170/unknown.png",
+                Color = new Color(0)
+            }.Build());
+
+        [Command("major3")]
+        public async Task Major3()
+            => await ReplyAsync("<:AFCMajor_Wor:700368330246193152>🦶🏿");
+
         [Command("rickert")]
         public async Task Rickert()
             => await Context.Channel.SendFileAsync("assets/rickert.mp4");
@@ -112,5 +128,9 @@ namespace GLR.Core.Commands.Modules
             => await ReplyAsync("", false, new EmbedBuilder()
             .WithImageUrl("https://cdn.discordapp.com/attachments/694261545840017449/704097544967553104/20181229_091342.gif")
             .Build());
+
+        [Command("youyou")]
+        public async Task YouYou()
+            => await Context.Channel.SendFileAsync("assets/youyou.mp4");
     }
 }
