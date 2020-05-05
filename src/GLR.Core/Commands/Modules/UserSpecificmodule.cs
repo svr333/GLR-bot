@@ -103,7 +103,7 @@ namespace GLR.Core.Commands.Modules
         public async Task Major2()
             => await ReplyAsync("", false, new EmbedBuilder()
             {
-                ImageUrl = "https://cdn.discordapp.com/attachments/428285688794972201/707200168700805170/unknown.png",
+                ImageUrl = "https://cdn.discordapp.com/attachments/703709768715468870/707272320300875876/hand.png",
                 Color = new Color(0)
             }.Build());
 
@@ -132,5 +132,11 @@ namespace GLR.Core.Commands.Modules
         [Command("youyou")]
         public async Task YouYou()
             => await Context.Channel.SendFileAsync("assets/youyou.mp4");
+
+        [Command("cloaca")]
+        public async Task Cloaca()
+            => await ReplyAsync("", false, new EmbedBuilder()
+            .WithImageUrl("https://cdn.discordapp.com/attachments/703709768715468870/707271537463525386/cloaaaaca.png")
+            .Build());
     }
 }
