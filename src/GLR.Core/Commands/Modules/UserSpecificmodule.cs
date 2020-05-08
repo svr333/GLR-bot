@@ -34,6 +34,10 @@ namespace GLR.Core.Commands.Modules
         public async Task Marido2()
             => await Context.Channel.SendFileAsync("assets/marido2.mp4");
 
+        [Command("marido3")]
+        public async Task Marido3()
+            => await Context.Channel.SendFileAsync("assets/marido3.mp4");
+
         [Command("tom")][Alias("inika", "bg", "jerry")]
         public async Task Bg()
             => await ReplyAsync("Tom and Jerry are the biggest bg (not big gay)");
@@ -50,6 +54,10 @@ namespace GLR.Core.Commands.Modules
         [Command("nudes2")]
         public async Task Nudes2()
             => await Context.Channel.SendFileAsync("assets/nudes2.mp4");
+
+        [Command("nudes3")]
+        public async Task Nudes3()
+            => await Context.Channel.SendFileAsync("assets/nudes3.mp4");
 
         [Command("aniela")]
         public async Task Aniela()
@@ -103,13 +111,17 @@ namespace GLR.Core.Commands.Modules
         public async Task Major2()
             => await ReplyAsync("", false, new EmbedBuilder()
             {
-                ImageUrl = "https://cdn.discordapp.com/attachments/703709768715468870/707272320300875876/hand.png",
+                ImageUrl = "https://cdn.discordapp.com/attachments/638859930736132097/707962880691011745/majorded.png",
                 Color = new Color(0)
             }.Build());
 
         [Command("major3")]
         public async Task Major3()
             => await ReplyAsync("<:AFCMajor_Wor:700368330246193152>🦶🏿");
+
+        [Command("major4")]
+        public async Task Major4()
+            => await Context.Channel.SendFileAsync("assets/major4.mp4");
 
         [Command("rickert")]
         public async Task Rickert()
@@ -122,6 +134,10 @@ namespace GLR.Core.Commands.Modules
         [Command("rickert3")]
         public async Task Rickert3()
             => await Context.Channel.SendFileAsync("assets/rickert3.mp4");
+        
+        [Command("rickert4")]
+        public async Task Rickert4()
+            => await Context.Channel.SendFileAsync("assets/rickert4.mp4");
 
         [Command("pyha")]
         public async Task Pyha()
@@ -137,6 +153,16 @@ namespace GLR.Core.Commands.Modules
         public async Task Cloaca()
             => await ReplyAsync("", false, new EmbedBuilder()
             .WithImageUrl("https://cdn.discordapp.com/attachments/703709768715468870/707271537463525386/cloaaaaca.png")
+            .Build());
+
+        [Command("omersi")]
+        public async Task Omersi()
+            => await Context.Channel.SendFileAsync("assets/omersi.mp4");
+
+        [Command("viktor")]
+        public async Task Viktor()
+            => await ReplyAsync("", false, new EmbedBuilder()
+            .WithImageUrl("https://cdn.discordapp.com/attachments/696478895083487272/707361905324458055/2Q.png")
             .Build());
     }
 }
