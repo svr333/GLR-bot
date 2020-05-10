@@ -42,7 +42,7 @@ namespace GLR.Core.Commands.Modules
         public async Task Marido4()
             => await Context.Channel.SendFileAsync("assets/marido4.mp4");
 
-        [Command("marido4")]
+        [Command("marido5")]
         public async Task Marido5()
             => await Context.Channel.SendFileAsync("assets/marido5.mp4");
 
