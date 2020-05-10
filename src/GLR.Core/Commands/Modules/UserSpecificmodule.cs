@@ -38,6 +38,14 @@ namespace GLR.Core.Commands.Modules
         public async Task Marido3()
             => await Context.Channel.SendFileAsync("assets/marido3.mp4");
 
+        [Command("marido4")]
+        public async Task Marido4()
+            => await Context.Channel.SendFileAsync("assets/marido4.mp4");
+
+        [Command("marido4")]
+        public async Task Marido5()
+            => await Context.Channel.SendFileAsync("assets/marido5.mp4");
+
         [Command("tom")][Alias("inika", "bg", "jerry")]
         public async Task Bg()
             => await ReplyAsync("Tom and Jerry are the biggest bg (not big gay)");
@@ -122,6 +130,14 @@ namespace GLR.Core.Commands.Modules
         [Command("major4")]
         public async Task Major4()
             => await Context.Channel.SendFileAsync("assets/major4.mp4");
+
+        [Command("major5")]
+        public async Task Major5()
+            => await ReplyAsync("", false, new EmbedBuilder()
+            {
+                ImageUrl = "https://tenor.com/view/peepee-hahaha-up-dog-smelling-gif-16559488",
+                Color = new Color(0)
+            }.Build());
 
         [Command("rickert")]
         public async Task Rickert()
