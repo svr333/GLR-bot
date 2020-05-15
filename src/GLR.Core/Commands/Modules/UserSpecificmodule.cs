@@ -75,6 +75,10 @@ namespace GLR.Core.Commands.Modules
                                 "\nI want her to embrace me and crack every single one of my ribs while i suffocate to death" +
                                 "\nI don't even care what does ADVENT do to humans i just want to bang that snake");
 
+        [Command("aniela2")][Alias("viperpill")]
+        public async Task Aniela2()
+            => await Context.Channel.SendFileAsync("assets/aniela2.mp4");
+
         [Command("whirl")]
         public async Task WhirlDies()
             => await Context.Channel.SendFileAsync("assets/whirl.mp4");
@@ -184,5 +188,9 @@ namespace GLR.Core.Commands.Modules
             => await ReplyAsync("", false, new EmbedBuilder()
             .WithImageUrl("https://cdn.discordapp.com/attachments/696478895083487272/707361905324458055/2Q.png")
             .Build());
+
+        [Command("andy")]
+        public async Task Andy()
+            => await Context.Channel.SendFileAsync("assets/andy.mp4");
     }
 }
