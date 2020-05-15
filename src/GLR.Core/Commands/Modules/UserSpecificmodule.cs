@@ -135,9 +135,13 @@ namespace GLR.Core.Commands.Modules
         public async Task Major5()
             => await ReplyAsync("", false, new EmbedBuilder()
             {
-                ImageUrl = "https://tenor.com/view/peepee-hahaha-up-dog-smelling-gif-16559488",
+                ImageUrl = "https://cdn.discordapp.com/attachments/638859930736132097/710860147454640168/ezgif.com-resize.gif",
                 Color = new Color(0)
             }.Build());
+
+        [Command("major6")]
+        public async Task Major6()
+            => await Context.Channel.SendFileAsync("assets/major6.mp4");
 
         [Command("rickert")]
         public async Task Rickert()
