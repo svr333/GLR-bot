@@ -44,6 +44,11 @@ namespace GLR.Core.Services.Commands
                 return;
             }
 
+            if (message.Author.Id == 647926333841604640 && message.Content.ToLower() == "gm")
+            {
+
+            }
+
             var guildId = (message.Author as SocketGuildUser).Guild.Id;
             var guild = _accounts.GetOrCreateGuildAccount(guildId);
 

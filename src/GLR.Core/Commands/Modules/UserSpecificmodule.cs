@@ -6,15 +6,9 @@ namespace GLR.Core.Commands.Modules
 {
     public class UserSpecificModule : GLRModule
     {
-        [Command("don")][Alias("naitoo")]
-        public async Task Don()
-        {
-            await ReplyAsync("🐝 <:AAAStarling_Happy:700370912486359141>");
-        }
-
-        [Command("chubi")]
-        public async Task Chubi()
-            => await ReplyAsync("Cringetard haha ticket");
+        [Command("bees")][Alias("beehappy", "beepill")]
+        public async Task Bees()
+            => await Context.Channel.SendFileAsync("assets/bees.mp4");
 
         [Command("maxim")]
         public async Task Maxim()
@@ -66,6 +60,18 @@ namespace GLR.Core.Commands.Modules
         [Command("nudes3")]
         public async Task Nudes3()
             => await Context.Channel.SendFileAsync("assets/nudes3.mp4");
+
+        [Command("nudes4")]
+        public async Task Nudes4()
+            => await Context.Channel.SendFileAsync("assets/666.mp4");
+
+        [Command("nudes5")]
+        public async Task Nudes5()
+            => await Context.Channel.SendFileAsync("assets/nudes5.mp4");
+
+        [Command("nudes6969")]
+        public async Task YouYou()
+            => await Context.Channel.SendFileAsync("assets/youyou.mp4");
 
         [Command("aniela")]
         public async Task Aniela()
@@ -168,10 +174,6 @@ namespace GLR.Core.Commands.Modules
             => await ReplyAsync("", false, new EmbedBuilder()
             .WithImageUrl("https://cdn.discordapp.com/attachments/694261545840017449/704097544967553104/20181229_091342.gif")
             .Build());
-
-        [Command("youyou")]
-        public async Task YouYou()
-            => await Context.Channel.SendFileAsync("assets/youyou.mp4");
 
         [Command("cloaca")]
         public async Task Cloaca()
