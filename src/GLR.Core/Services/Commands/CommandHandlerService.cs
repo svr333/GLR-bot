@@ -46,7 +46,8 @@ namespace GLR.Core.Services.Commands
 
             if (message.Author.Id == 647926333841604640 && message.Content.ToLower() == "gm")
             {
-
+                await message.AddReactionAsync(new Emoji("🧄"));
+                await message.AddReactionAsync(new Emoji("🤡"));
             }
 
             var guildId = (message.Author as SocketGuildUser).Guild.Id;
