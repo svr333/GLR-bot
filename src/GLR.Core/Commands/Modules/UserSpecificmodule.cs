@@ -185,6 +185,10 @@ namespace GLR.Core.Commands.Modules
         public async Task Omersi()
             => await Context.Channel.SendFileAsync("assets/omersi.mp4");
 
+        [Command("omersi2")]
+        public async Task Omersi2()
+            => await Context.Channel.SendFileAsync("assets/omersi2.mp4");
+
         [Command("viktor")]
         public async Task Viktor()
             => await ReplyAsync("", false, new EmbedBuilder()
@@ -194,5 +198,13 @@ namespace GLR.Core.Commands.Modules
         [Command("andy")]
         public async Task Andy()
             => await Context.Channel.SendFileAsync("assets/andy.mp4");
+
+        [Command("spotify")]
+        public async Task Spotify()
+            => await Context.Channel.SendMessageAsync("", false, new EmbedBuilder()
+            {
+                Color = Color.Green,
+                ImageUrl = "https://cdn.discordapp.com/attachments/711232642619539479/712658981696569384/unknown.png"
+            }.Build());
     }
 }
