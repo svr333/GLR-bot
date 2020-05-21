@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
-using GLR.Core.Entities;
-using GLR.Core.Services;
+using GLR.Net;
+using GLR.Net.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,24 +10,20 @@ namespace GLR.Core.Commands.Modules
 {
     public class ProfileModule : GLRModule
     {
-        private ProfileService _profileService;
+        private GLRClient _client;
 
-        public ProfileModule(ProfileService profileService)
+        public ProfileModule(GLRClient client)
         {
-            _profileService = profileService;
+            _client = client;
         }
 
         [Command("profile", RunMode = RunMode.Async)]
-        public async Task ShowProfile([Remainder]string userName = "")
+        public async Task ShowProfile([Remainder]string user = "")
         {
-            if (string.IsNullOrEmpty(userName)) userName = Context.User.Username;
+            if (string.IsNullOrEmpty(user)) user = Context.User.Username;
 
-            var profile = await _profileService.GetFullProfileAsync(userName);
-            if (profile == null) 
-            {
-                await ReplyAsync($"There is no user named `{userName}`.");
-                return;
-            }
+            var id = await _client.GetIdAsync(user);
+            var profile = await _client.GetProfileAsync(id);
 
             var embed = new EmbedBuilder()
                 .WithTitle($"Game profile for {profile.Username}")
@@ -50,8 +46,9 @@ namespace GLR.Core.Commands.Modules
         {
             if (string.IsNullOrEmpty(user)) user = Context.User.Username;
 
-            var profile = await _profileService.GetFullProfileAsync(user);
-            var friends = await _profileService.GetFriendsAsync(profile.Id);
+            var id = await _client.GetIdAsync(user);
+            var profile = await _client.GetProfileAsync(id);
+            var friends = await _client.GetFriendsAsync(id);
             if (friends is null) await ReplyAsync("User doesn't have any friends!");
             
             var displayTexts = friends.Select(x => $"**{x.Username}** ({x.Id})");
@@ -68,9 +65,9 @@ namespace GLR.Core.Commands.Modules
         public async Task Stats(string user = "")
         {
             if (string.IsNullOrEmpty(user)) user = Context.User.Username;
-            var id = await _profileService.GetIdAsync(user);
+            var id = await _client.GetIdAsync(user);
 
-            var stats = await _profileService.GetUserStatisticsAsync(id);
+            var stats = await _client.GetStatisticsAsync(id);
 
             var statusEmote = stats.Status == Status.Online ? "<:online:705571366622986351>" : "<:offline:705571366614597722>";
 

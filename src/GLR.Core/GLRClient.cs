@@ -1,22 +1,22 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using GLR.Core.Services;
 using GLR.Core.Services.Commands;
 using GLR.Core.Services.DataStorage;
 using Microsoft.Extensions.DependencyInjection;
+using GLR.Net;
 using System;
 using System.Threading.Tasks;
 
 namespace GLR.Core
 {
-    public class GLRClient
+    public class GLRBotClient
     {
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
 
-        public GLRClient(CommandService commands = null, DiscordSocketClient client = null)
+        public GLRBotClient(CommandService commands = null, DiscordSocketClient client = null)
         {
             _client = client ?? new DiscordSocketClient(new DiscordSocketConfig
             {
@@ -43,7 +43,7 @@ namespace GLR.Core
             _client.Log += LogAsync;
             _commands.Log += LogAsync;
 
-            var token = Environment.GetEnvironmentVariable("GLRToken");
+            var token = Environment.GetEnvironmentVariable("DevToken");
 
             await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, token));
             await _client.StartAsync();
@@ -67,7 +67,7 @@ namespace GLR.Core
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
                 .AddSingleton<CommandHandlerService>()
-                .AddSingleton<ProfileService>()
+                .AddSingleton<GLRClient>()
                 .AddSingleton<LiteDBHandler>()
                 .AddSingleton<GuildAccountService>()
                 .AddSingleton<PaginatorService>()
