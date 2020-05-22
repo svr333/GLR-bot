@@ -43,7 +43,7 @@ namespace GLR.Core
             _client.Log += LogAsync;
             _commands.Log += LogAsync;
 
-            var token = Environment.GetEnvironmentVariable("DevToken");
+            var token = Environment.GetEnvironmentVariable("GLRToken");
 
             await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, token));
             await _client.StartAsync();
