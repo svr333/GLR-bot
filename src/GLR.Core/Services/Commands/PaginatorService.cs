@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +12,11 @@ namespace GLR.Core.Services.Commands
 {
     public class PaginatorService
     {
+        // for some reason this one doesn't work, so it's hardcoded
+        //private IEmote _last = new Emoji("️⏭");
         private IEmote _next = new Emoji("▶️");
         private IEmote _previous = new Emoji("◀️");
         private IEmote _first = new Emoji("⏮️");
-        private IEmote _last = new Emoji("️⏭️");
         private List<PaginatedMessage> _activeMessages;
         private ConcurrentDictionary<ulong, Timer> _activeTimers;
         private DiscordSocketClient _client;
@@ -40,7 +40,7 @@ namespace GLR.Core.Services.Commands
             if (reaction.Emote.Name == _first.Name) await GoToFirstPageAsync(message.Id);
             else if (reaction.Emote.Name == _previous.Name) await GoToPreviousPageAsync(message.Id);
             else if (reaction.Emote.Name == _next.Name) await GoToNextPageAsync(message.Id);
-            else if (reaction.Emote.Name == _last.Name) await GoToLastPageAsync(message.Id);
+            else if (reaction.Emote.Name == new Emoji("⏭️").Name) await GoToLastPageAsync(message.Id);
             else return;
             ResetTimer(message.Id);
         }
@@ -83,6 +83,7 @@ namespace GLR.Core.Services.Commands
             var paginatorMessage = _activeMessages.First(x => x.DiscordMessageId == messageId);
             var channel = _client.GetChannel(paginatorMessage.DiscordChannelId) as SocketTextChannel;
             var message = channel.GetMessageAsync(paginatorMessage.DiscordMessageId).GetAwaiter().GetResult() as SocketUserMessage;
+            if (message is null) return;
             message.RemoveAllReactionsAsync().GetAwaiter().GetResult();
             
             _activeMessages.Remove(paginatorMessage);
@@ -102,11 +103,10 @@ namespace GLR.Core.Services.Commands
 
         private async Task AddPaginatorReactions(IUserMessage message)
         {
-            await message.AddReactionAsync(_first);
-            await message.AddReactionAsync(_previous);
-            await message.AddReactionAsync(_next);
-            await message.AddReactionAsync(_last);
-            
+            await message.AddReactionAsync(new Emoji("⏮️"));
+            await message.AddReactionAsync(new Emoji("◀️"));
+            await message.AddReactionAsync(new Emoji("▶️"));
+            await message.AddReactionAsync(new Emoji("⏭️"));
         }
 
         private async Task HandleUpdateMessagePagesAsync(PaginatedMessage msg)

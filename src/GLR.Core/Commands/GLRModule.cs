@@ -14,6 +14,11 @@ namespace GLR.Core.Commands
 {
     public class GLRModule : ModuleBase<SocketCommandContext>
     {
+        private IEmote _next = new Emoji("▶️");
+        private IEmote _previous = new Emoji("◀️");
+        private IEmote _first = new Emoji("⏮️");
+        private IEmote _last = new Emoji("️⏭️");
+
         public GuildAccountService Accounts { get; set; }
         public PaginatorService Paginator { get; set; }
         private CommandInfo _currentCommand;
@@ -77,7 +82,9 @@ namespace GLR.Core.Commands
             templateEmbed = templateEmbed.WithDescription(string.Join("\n", displayTexts.Take(10)));
             
             var message = await Paginator.HandleNewPaginatedMessageAsync(Context, displayTexts, templateEmbed.Build());
+            await Task.Delay(1000);    
+
             return message;
-        }        
+        }
     }
 }
