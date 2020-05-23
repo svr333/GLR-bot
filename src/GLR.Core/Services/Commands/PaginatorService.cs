@@ -34,14 +34,17 @@ namespace GLR.Core.Services.Commands
         {
             var message = await msg.GetOrDownloadAsync();
 
-            if (reaction.UserId == message.Author.Id) return;
-            if (_activeMessages.Where(x => x.DiscordMessageId == message.Id).FirstOrDefault() is null) return;
+            var paginatedMessage = _activeMessages.Find(x => x.DiscordMessageId == message.Id);
+            if (paginatedMessage is null) return;
+
+            if (reaction.UserId != paginatedMessage.DiscordUserId) return;
 
             if (reaction.Emote.Name == _first.Name) await GoToFirstPageAsync(message.Id);
             else if (reaction.Emote.Name == _previous.Name) await GoToPreviousPageAsync(message.Id);
             else if (reaction.Emote.Name == _next.Name) await GoToNextPageAsync(message.Id);
             else if (reaction.Emote.Name == new Emoji("⏭️").Name) await GoToLastPageAsync(message.Id);
             else return;
+
             ResetTimer(message.Id);
         }
 
@@ -52,6 +55,7 @@ namespace GLR.Core.Services.Commands
             {
                 DiscordMessageId = message.Id,
                 DiscordChannelId = message.Channel.Id,
+                DiscordUserId = context.User.Id,
                 DisplayMessages = displayTexts.ToArray()
             };
             _activeMessages.Add(paginatedMessage);

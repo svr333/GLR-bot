@@ -9,6 +9,7 @@ namespace GLR.Core.Entities
 
         public ulong DiscordMessageId { get; set; }
         public ulong DiscordChannelId { get; set; }
+        public ulong DiscordUserId { get; set; }
         public string[] DisplayMessages { get; set; }
         public int CurrentPage 
         {
