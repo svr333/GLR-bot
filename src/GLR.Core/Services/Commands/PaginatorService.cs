@@ -38,6 +38,7 @@ namespace GLR.Core.Services.Commands
             if (paginatedMessage is null) return;
 
             if (reaction.UserId != paginatedMessage.DiscordUserId) return;
+            await message.RemoveReactionAsync(reaction.Emote, reaction.User.Value);
 
             if (reaction.Emote.Name == _first.Name) await GoToFirstPageAsync(message.Id);
             else if (reaction.Emote.Name == _previous.Name) await GoToPreviousPageAsync(message.Id);
