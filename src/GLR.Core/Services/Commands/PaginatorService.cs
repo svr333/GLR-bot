@@ -27,7 +27,6 @@ namespace GLR.Core.Services.Commands
             _activeTimers = new ConcurrentDictionary<ulong, Timer>();
             _client = client;
             _client.ReactionAdded += OnReactionUpdated;
-            _client.ReactionRemoved += OnReactionUpdated;
         }
 
         private async Task OnReactionUpdated(Cacheable<IUserMessage, ulong> msg, ISocketMessageChannel channel, SocketReaction reaction)
