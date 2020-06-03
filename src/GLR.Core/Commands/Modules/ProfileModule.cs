@@ -3,6 +3,7 @@ using Discord.Commands;
 using GLR.Net;
 using GLR.Net.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -58,7 +59,7 @@ namespace GLR.Core.Commands.Modules
                                 .WithColor(Color.DarkBlue)
                                 .WithAuthor("", "", "")
                                 .WithFooter("Friends are ordered by day you added them.", "");
-            await SendPaginatedMessage(displayTexts, templateEmbed);
+            await SendPaginatedMessageAsync(displayTexts, templateEmbed);
         }
 
         [Command("statistics")][Alias("stats")]
@@ -82,6 +83,24 @@ namespace GLR.Core.Commands.Modules
             }
             .WithFooter($"Requested by {Context.User.Username} | {Context.User.Id}")
             .Build());
+        }
+    
+        [Command("leaderboard")][Alias("lb, leaderboards")]
+        public async Task DisplayLeaderboards(string leaderboardType = "levels")
+        {
+            IEnumerable<string> displayTexts = new string[] { "Error while retrieving data." };
+
+            if (leaderboardType == "chips") displayTexts = await _client.GetTopChipsPlayers();
+            else if (leaderboardType == "levels") displayTexts = await _client.GetTopLevelPlayers();
+            else throw new Exception("Wrong leaderboard type. Either choose `levels´ or `chips´.");
+
+            var templateEmbed = new EmbedBuilder()
+                                .WithTitle($"{leaderboardType.ToUpperInvariant()} Leaderboard")
+                                .WithColor(Color.Purple)
+                                .WithAuthor("", "", "")
+                                .WithFooter($"Requested by {Context.User.Username}", "");
+
+            await SendPaginatedMessageAsync(displayTexts, templateEmbed);
         }
     }
 }

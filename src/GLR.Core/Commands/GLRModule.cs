@@ -76,7 +76,7 @@ namespace GLR.Core.Commands
             return true;
         }
     
-        public async Task<IUserMessage> SendPaginatedMessage(IEnumerable<string> displayTexts, EmbedBuilder templateEmbed)
+        public async Task<IUserMessage> SendPaginatedMessageAsync(IEnumerable<string> displayTexts, EmbedBuilder templateEmbed)
         {
             templateEmbed.WithTitle($"{templateEmbed.Title} | Page 1");
             templateEmbed = templateEmbed.WithDescription(string.Join("\n", displayTexts.Take(10)));
