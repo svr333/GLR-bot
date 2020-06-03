@@ -67,6 +67,7 @@ namespace GLR.Core.Commands.Modules
         {
             if (string.IsNullOrEmpty(user)) user = Context.User.Username;
             var id = await _client.GetIdAsync(user);
+            var profile = await _client.GetProfileAsync(id);
 
             var stats = await _client.GetStatisticsAsync(id);
 
@@ -75,6 +76,7 @@ namespace GLR.Core.Commands.Modules
             await ReplyAsync("", false, new EmbedBuilder()
             {
                 Title = $"Statistics for {stats.Username} ({id})",
+                Url = profile.Url,
                 Color = Color.DarkMagenta,
                 ThumbnailUrl = $"https://galaxylifereborn.com/uploads/avatars/{id}.png?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}",
                 Description = $"\u200b\n<:exp:705566339070296104> {stats.Level} \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:starbase:705566339078815755> {stats.Starbase}" +
@@ -85,7 +87,7 @@ namespace GLR.Core.Commands.Modules
             .Build());
         }
     
-        [Command("leaderboard")][Alias("lb, leaderboards")]
+        [Command("leaderboard")][Alias("lb")]
         public async Task DisplayLeaderboards(string leaderboardType = "levels")
         {
             IEnumerable<string> displayTexts = new string[] { "Error while retrieving data." };
@@ -98,7 +100,7 @@ namespace GLR.Core.Commands.Modules
                                 .WithTitle($"{leaderboardType.ToUpperInvariant()} Leaderboard")
                                 .WithColor(Color.Purple)
                                 .WithAuthor("", "", "")
-                                .WithFooter($"Requested by {Context.User.Username}", "");
+                                .WithFooter($"Requested by {Context.User.Username} | {Context.User.Id}", "");
 
             await SendPaginatedMessageAsync(displayTexts, templateEmbed);
         }
