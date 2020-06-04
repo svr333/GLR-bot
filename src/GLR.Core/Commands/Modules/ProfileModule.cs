@@ -90,11 +90,16 @@ namespace GLR.Core.Commands.Modules
         [Command("leaderboard")][Alias("lb")]
         public async Task DisplayLeaderboards(string leaderboardType = "levels")
         {
-            IEnumerable<string> displayTexts = new string[] { "Error while retrieving data." };
+            IList<string> displayTexts = new string[] { "Error while retrieving data." };
 
-            if (leaderboardType == "chips") displayTexts = await _client.GetTopChipsPlayers();
-            else if (leaderboardType == "levels") displayTexts = await _client.GetTopLevelPlayers();
+            if (leaderboardType == "chips") displayTexts = (await _client.GetTopChipsPlayers()).ToArray();
+            else if (leaderboardType == "levels") displayTexts = (await _client.GetTopLevelPlayers()).ToArray();
             else throw new Exception("Wrong leaderboard type. Either choose `levels´ or `chips´.");
+            
+            for (int i = 0; i < displayTexts.Count(); i++)
+            {
+                displayTexts[i] = $"**#{i + 1}** | {displayTexts[i].Split(' ').First()}\n";
+            }
 
             var templateEmbed = new EmbedBuilder()
                                 .WithTitle($"{leaderboardType.ToUpperInvariant()} Leaderboard")
