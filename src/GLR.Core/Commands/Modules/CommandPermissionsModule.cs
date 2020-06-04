@@ -71,7 +71,7 @@ namespace GLR.Core.Commands.Modules
             else if (action == "disable") guild.DisableWhitelist(formattedName, true);
 
             _accounts.SaveGuildAccount(guild);
-            await ReplyAsync($"Successfully {action}d whitelist instead of blacklist for roles.");
+            await ReplyAsync($"Successfully {action}d whitelist instead of blacklist for channels.");
         }
 
         [Command("commandwhitelist")]
