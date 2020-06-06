@@ -109,5 +109,49 @@ namespace GLR.Core.Commands.Modules
 
             await SendPaginatedMessageAsync(displayTexts, templateEmbed);
         }
+    
+        [Command("compare")][Alias("c")]
+        public async Task CompareStats(string baseUser, string secondUser)
+        {
+            var baseUserId = await _client.GetIdAsync(baseUser);
+            var baseUserStats = await _client.GetStatisticsAsync(baseUserId);
+
+            var secondUserId = await _client.GetIdAsync(secondUser);
+            var secondUserStats = await _client.GetStatisticsAsync(secondUserId);
+
+            var expDifference = Math.Round((decimal)baseUserStats.ExperiencePoints / secondUserStats.ExperiencePoints, 2);
+
+            await ReplyAsync("", false, new EmbedBuilder()
+            {
+                Title = $"Comparison between {baseUserStats.Username} & {secondUserStats.Username}",
+                Description = $"{baseUserStats.Username} has **{expDifference}x** the experience of {secondUserStats.Username}\n" +
+                              $"Difference of **{FormatExperience(Math.Abs((decimal)baseUserStats.ExperiencePoints - secondUserStats.ExperiencePoints))}** experience.\n\n" + 
+                              $"{baseUserStats.Username} has **{FormatExperience(baseUserStats.ExperiencePoints)}** experience and is level **{baseUserStats.Level}**.\n" +
+                              $"{secondUserStats.Username} has **{FormatExperience(secondUserStats.ExperiencePoints)}** experience and is level **{secondUserStats.Level}**.",
+                Color = expDifference > 1 ? Color.DarkGreen : Color.DarkOrange
+            }
+            .Build());
+        }
+
+        [Command("compare")][Alias("c")]
+        public async Task CompareStats(string userToCompare)
+            => await CompareStats(Context.User.Username, userToCompare);
+    
+        private string FormatExperience(decimal experiencePoints)
+        {
+            // 10mil< 
+            if (experiencePoints > 10000000) return $"{Math.Round(experiencePoints / 1000000, 1)}M";
+
+            // 1mil< 
+            else if (experiencePoints > 1000000) return $"{Math.Round(experiencePoints / 1000000, 2)}M";
+
+            // 100K<
+            else if (experiencePoints > 10000) return $"{Math.Round(experiencePoints / 1000, 1)}K";
+
+            // 10K<
+            else if (experiencePoints > 10000) return $"{Math.Round(experiencePoints / 1000, 2)}K";
+
+            else return experiencePoints.ToString();
+        }
     }
 }
