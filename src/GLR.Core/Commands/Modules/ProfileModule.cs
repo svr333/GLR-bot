@@ -150,9 +150,9 @@ namespace GLR.Core.Commands.Modules
             var secondUserId = await _client.GetIdAsync(userToCompare);
             var secondUserStats = await _client.GetStatisticsAsync(secondUserId);
 
-            var expToGain = secondUserStats.ExperiencePoints - baseUserStats.ExperiencePoints;
+            var expToGain = (long)secondUserStats.ExperiencePoints - (long)baseUserStats.ExperiencePoints;
             if (expToGain < 0) throw new Exception($"{baseUserStats.Username} is already ahead of {secondUserStats.Username}");
-            if (expToGain == 0) throw new Exception($"{baseUserStats.Username} & {secondUserStats.Username} have equally as much exp.");
+            else if (expToGain == 0) throw new Exception($"{baseUserStats.Username} & {secondUserStats.Username} have equally as much exp.");
             
             await ReplyAsync("", false, new EmbedBuilder()
             {
