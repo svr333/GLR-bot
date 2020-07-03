@@ -71,7 +71,8 @@ namespace GLR.Core.Commands.Modules
 
             var stats = await _client.GetStatisticsAsync(id);
 
-            var statusEmote = stats.Status == Status.Online ? "<:online:705571366622986351>" : "<:offline:705571366614597722>";
+            var displayStatus = stats.Status == Status.Online ? "<:online:705571366622986351> online" : "<:offline:705571366614597722> offline";
+            var displayAlliance = stats.AllianceName == "None" ? "User is not in any alliance." : $"User is part of **{stats.AllianceName}**.";
 
             await ReplyAsync("", false, new EmbedBuilder()
             {
@@ -79,10 +80,14 @@ namespace GLR.Core.Commands.Modules
                 Url = profile.Url,
                 Color = Color.DarkMagenta,
                 ThumbnailUrl = $"https://galaxylifereborn.com/uploads/avatars/{id}.png?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}",
-                Description = $"\u200b\n<:exp:705566339070296104> {stats.Level} \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:starbase:705566339078815755> {stats.Starbase}" +
-                              $"\n<:colonies:705566339120758864> {stats.Colonies} \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:quest:705569878169485334> {stats.MissionsCompleted}" +
-                              $"\n{statusEmote} {stats.Status} \u200b \u200b \u200b \u200b \u200b \u200b \u200b <:lastonline:705566339179216957> {stats.LastOnline.ToShortDateString()}\n\u200b"
+                Description = $"{displayAlliance}\nUser is level **{stats.Level}**.\n\u200b"
             }
+            .AddField("Experience", FormatNumbers(stats.ExperiencePoints), true)
+            .AddField("Starbase", stats.Starbase, true)
+            .AddField("Colonies", stats.Colonies, true)
+            .AddField("Missions Completed", stats.MissionsCompleted, true)
+            .AddField("Status", displayStatus, true)
+            .AddField("Last Login", stats.LastOnline.ToShortDateString(), true)
             .WithFooter($"Requested by {Context.User.Username} | {Context.User.Id}")
             .Build());
         }

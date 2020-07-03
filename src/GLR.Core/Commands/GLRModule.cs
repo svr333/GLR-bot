@@ -82,7 +82,7 @@ namespace GLR.Core.Commands
             templateEmbed = templateEmbed.WithDescription(string.Join("\n", displayTexts.Take(10)));
             
             var message = await Paginator.HandleNewPaginatedMessageAsync(Context, displayTexts, templateEmbed.Build());
-            await Task.Delay(1000);    
+            await Task.Delay(1000);
 
             return message;
         }
