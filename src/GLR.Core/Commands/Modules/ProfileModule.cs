@@ -26,12 +26,14 @@ namespace GLR.Core.Commands.Modules
             var id = await _client.GetIdAsync(user);
             var profile = await _client.GetProfileAsync(id);
 
+            var displayRank = profile.RankInfo.Rank == Rank.Banned ? "**BANNED**" : $"a {profile.RankInfo.Rank}";
+
             var embed = new EmbedBuilder()
                 .WithTitle($"Game profile for {profile.Username}")
                 .WithUrl(profile.Url)
                 .WithThumbnailUrl(profile.ImageUrl)
                 .WithDescription($"\nThis user has ID **{profile.Id}**." +
-                                $"\n**{profile.Username}** is a **{profile.RankInfo.Rank}**.")
+                                $"\n**{profile.Username}** is {displayRank}.")
                 .AddField("Friends", $"The user has **{profile.AmountOfFriends}** friends." +
                     $"\nThe user has **{profile.AmountOfIncomingRequests}** pending incoming requests." +
                     $"\nThe user has **{profile.AmountOfOutgoingRequests}** pending outgoing requests.")
@@ -71,7 +73,6 @@ namespace GLR.Core.Commands.Modules
 
             var stats = await _client.GetStatisticsAsync(id);
 
-            var displayStatus = stats.Status == Status.Online ? "<:online:705571366622986351> online" : "<:offline:705571366614597722> offline";
             var displayAlliance = stats.AllianceName == "None" ? "User is not in any alliance." : $"User is part of **{stats.AllianceName}**.";
 
             await ReplyAsync("", false, new EmbedBuilder()
@@ -85,9 +86,9 @@ namespace GLR.Core.Commands.Modules
             .AddField("Experience", FormatNumbers(stats.ExperiencePoints), true)
             .AddField("Starbase", stats.Starbase, true)
             .AddField("Colonies", stats.Colonies, true)
-            .AddField("Missions Completed", stats.MissionsCompleted, true)
-            .AddField("Status", displayStatus, true)
-            .AddField("Last Login", stats.LastOnline.ToShortDateString(), true)
+            .AddField("Missions", stats.MissionsCompleted, true)
+            .AddField("Status", stats.Status, true)
+            .AddField("Last seen", stats.LastOnline.ToShortDateString(), true)
             .WithFooter($"Requested by {Context.User.Username} | {Context.User.Id}")
             .Build());
         }
