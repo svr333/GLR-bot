@@ -36,18 +36,12 @@ namespace GLR.Core.Services.Commands
         private async Task OnMessageReceived(SocketMessage msg)
         {
             if (!(msg is SocketUserMessage message)) return;
-            if (message.Author == _client.CurrentUser) { return; }            
-            
+            if (message.Author == _client.CurrentUser) { return; }  
+
             if (message.Channel is IPrivateChannel)
             {
                 await message.Channel.SendMessageAsync($"I only respond in guilds.");
                 return;
-            }
-
-            if (message.Author.Id == 647926333841604640 && message.Content.ToLower() == "gm")
-            {
-                await message.AddReactionAsync(new Emoji("🧄"));
-                await message.AddReactionAsync(new Emoji("🤡"));
             }
 
             var guildId = (message.Author as SocketGuildUser).Guild.Id;
