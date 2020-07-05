@@ -1,5 +1,7 @@
 # GLR-bot
-Discord bot for GLR
+**DEPRECATED**, this will no longer be used since I moved the project to: [GLRDiscordBot](https://github.com/svr333/GLRDiscordBot).
+Reason behind this is so I could use [This Template](https://github.com/svr333/AdvancedBot-Template) to build off of.
+This will make development easier long-term wise.
 
 # Invite
 
